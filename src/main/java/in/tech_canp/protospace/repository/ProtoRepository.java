@@ -1,4 +1,4 @@
-package in.tech_canp.protospace_kcs.repository;
+package in.tech_canp.protospace.repository;
 
 import java.util.List;
 
