@@ -18,4 +18,8 @@ public interface ProtoRepository {
 
 }
 
+<<<<<<< Updated upstream
+=======
+//test
+>>>>>>> Stashed changes
 //test
