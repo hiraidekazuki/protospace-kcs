@@ -1,4 +1,4 @@
-package in.tech_canp.protospace;
+package in.tech_camp.protospace;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

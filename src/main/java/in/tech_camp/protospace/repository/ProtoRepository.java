@@ -1,4 +1,4 @@
-package in.tech_canp.protospace.repository;
+package in.tech_camp.protospace.repository;
 
 import java.util.List;
 
@@ -7,14 +7,13 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
-import in.tech_camp.pictweet.entity.ProtoEntity;
+import in.tech_camp.protospace.entity.ProtoEntity;
 
 @Mapper
 public interface ProtoRepository {
 
-  @Insert("INSERT INTO tweets (name, text, image) VALUES (#{name}, #{text}, #{image})")
+  @Insert("INSERT INTO prot (name, catchcopy, concept, image) VALUES (#{name}, #{catchcopy}, #{concept}, #{image})")
   @Options(useGeneratedKeys = true, keyProperty = "id")
   void insert(ProtoEntity proto);
 
 }
-
