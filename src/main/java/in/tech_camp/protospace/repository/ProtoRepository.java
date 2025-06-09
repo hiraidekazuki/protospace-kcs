@@ -9,8 +9,7 @@ import in.tech_camp.protospace.entity.ProtoEntity;
 @Mapper
 public interface ProtoRepository {
 
-
-  @Insert("INSERT INTO tweets (name, text, image) VALUES (#{name}, #{text}, #{image})")
+  @Insert("INSERT INTO protos (name, text, image) VALUES (#{name}, #{text}, #{image})")
   @Options(useGeneratedKeys = true, keyProperty = "id")
   void insert(ProtoEntity proto);
 

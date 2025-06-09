@@ -9,7 +9,7 @@ import in.tech_camp.protospace.form.ProtoForm;
 @Controller
 public class ProtoController {
 
-    @GetMapping("/prots/new")
+    @GetMapping("/protos/new")
     public String showProtoNew(Model model) {
         // 仮のデータをセット
         ProtoForm dummyForm = new ProtoForm();
@@ -20,6 +20,6 @@ public class ProtoController {
 
         model.addAttribute("protoForm", dummyForm);
 
-        return "prots/new"; // new.html（テンプレート）を表示
+        return "protos/new"; // new.html（テンプレート）を表示
     }
 }

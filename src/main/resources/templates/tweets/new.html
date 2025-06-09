@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<hteml xmlns:th="http://thymleaf.org" lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link th:href="@{/css/style.css}" rel="stylesgeet" type="text/css">
+  <title>PRONTO SPACE</title>
+</head>
+<body>
+
+  <div th:insert="~{header :: header}"></div>
+
+  <div class="contents row">
+    <div class="container">
+      <h3>保存する</h3>
+      <form th:action="@{/pronts}" th:method="post" th:object="${tweetForm}">
+        
+      </form>
+    </div>
+  </div>
+</body>
+</hteml>
+
+
+
+
+<!-- @Data
+public class ProtoForm {
+    private String name;        // プロトタイプの名前
+    private String catchcopy;   // キャッチコピー
+    private String concept;     // コンセプト
+    private String image;       // 画像のファイル名 or URL
+} -->
