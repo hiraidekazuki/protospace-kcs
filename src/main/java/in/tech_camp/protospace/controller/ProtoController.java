@@ -17,6 +17,16 @@ public class ProtoController {
     @Autowired
     private ProtoRepository protoRepository;
 
+    @GetMapping("/")
+    public String showRoot() {
+        return "protos/index";
+    }
+
+    @GetMapping("/index")
+    public String showIndex(Model model) {
+        return "protos/index";
+    }
+
     @GetMapping("/protos/new")
     public String showProtoNew(Model model) {
         // 空のフォームオブジェクトをセット
