@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProtoSpace</title>
+  <meta name="csrf-token" th:content="${_csrf.token}" />
+
+  <link th:href="@{/assets/style.css}" rel="stylesheet" type="text/css">
+  <script th:src="@{/packs/js/application.js}"></script>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ヘッダー共通化 -->
+<div th:insert="~{fragments/header :: header}"></div>
+
+<!-- 検索フォーム -->
+<form th:action="@{/prototypes/search}" method="get" th:object="${searchForm}" class="search-form">
+  <input type="text" th:field="*{keyword}" placeholder="プロトタイプを検索する" class="search-input" />
+  <input type="submit" class="search-btn" value="検索" />
+</form>
+
+<main class="main">
+  <div class="inner">
+
+    <!-- あいさつ表示 -->
+    <div class="greeting">
+      こんにちは、
+      <a class="greeting__link" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.name} + 'さん'">ユーザー名</a>
+    </div>
+
+  </div>
+</main>
+
+<!-- フッター共通化 -->
+<div th:insert="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

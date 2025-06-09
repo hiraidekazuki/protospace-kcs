@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+  <title>PRONTO SPACE</title>
+</head>
+<body>
+
+  <div th:insert="~{header :: header}"></div>
+
+  <div class="contents row">
+    <div class="container">
+      <h3>保存する</h3>
+      <form th:action="@{/protos}" th:method="post" th:object="${protoForm}">
+       <input type="text" th:field="*{name}" placeholder="プロトタイプの名前" />
+       <input type="text" th:field="*{catchcopy}" placeholder="キャッチコピー" />
+       <textarea th:field="*{concept}" placeholder="コンセプト" rows="10"></textarea>
+       <input type="text" th:field="*{image}" placeholder="画像のURLまたはファイル名" />
+       <input type="submit" value="SAVE" />
+      </form>
+    </div>
+  </div>
+
+  <div th:insert="~{footer :: footer}"></div>
+
+</body>
+</html>
