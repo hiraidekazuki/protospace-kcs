@@ -1,12 +1,5 @@
 package in.tech_camp.protospace.controller;
 
-
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import in.tech_camp.protospace.form.ProtoForm;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,40 +14,24 @@ import in.tech_camp.protospace.repository.ProtoRepository;
 @Controller
 public class ProtoController {
 
-
-    @GetMapping("/prots/new")
-    public String showProtoNew(Model model) {
-        // 仮のデータをセット
-
     @Autowired
     private ProtoRepository protoRepository;
 
     @GetMapping("/protos/new")
     public String showProtoNew(Model model) {
-        // 空のフォームオブジェクトをセット
-
         ProtoForm dummyForm = new ProtoForm();
         dummyForm.setName("");
         dummyForm.setCatchcopy("");
         dummyForm.setConcept("");
-
-        dummyForm.setImage("s"); // 画像は仮の名前
-
-        model.addAttribute("protoForm", dummyForm);
-
-        return "prots/new"; // new.html（テンプレート）を表示
-            }
-}
-
-        dummyForm.setImage("");
+        dummyForm.setImage(""); 
 
         model.addAttribute("protoForm", dummyForm);
-        return "protos/new"; // new.htmlを表示
+
+        return "protos/new"; 
     }
 
     @PostMapping("/protos")
     public String createProto(@ModelAttribute("protoForm") ProtoForm protoForm) {
-        // FormからEntityに値をコピー
         ProtoEntity proto = new ProtoEntity();
         proto.setName(protoForm.getName());
         proto.setCatchcopy(protoForm.getCatchcopy());
@@ -62,13 +39,12 @@ public class ProtoController {
         proto.setImage(protoForm.getImage());
 
         try {
-            protoRepository.insert(proto);  
+            protoRepository.save(proto);
         } catch (Exception e) {
             System.out.println("エラー：" + e);
-            return "redirect:/protos/new"; 
+            return "redirect:/protos/new";
         }
 
-        return "redirect:/"; 
+        return "redirect:/";
     }
 }
-

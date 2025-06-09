@@ -17,7 +17,7 @@ import in.tech_camp.protospace.entity.ProtoEntity;
 public interface ProtoRepository {
 
 
-  @Insert("INSERT INTO prot (name, catchcopy, concept, image) VALUES (#{name}, #{catchcopy}, #{concept}, #{image})")
+  @Insert("INSERT INTO proto (name, catchcopy, concept, image) VALUES (#{name}, #{catchcopy}, #{concept}, #{image})")
   @Options(useGeneratedKeys = true, keyProperty = "id")
   void insert(ProtoEntity proto);
 
@@ -29,6 +29,8 @@ public interface ProtoRepository {
   @Insert("INSERT INTO protos (name, catchcopy, concept, image, user_name) VALUES (#{name}, #{catchcopy}, #{concept}, #{image}, #{user_name})")
   @Options(useGeneratedKeys = true, keyProperty = "id")
   void insert(ProtoEntity proto);
+
+  void save(ProtoEntity proto);
 
 }
 
