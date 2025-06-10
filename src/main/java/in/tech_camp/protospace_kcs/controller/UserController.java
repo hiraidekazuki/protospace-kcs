@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import in.tech_camp.protospace_kcs.entity.UserEntity;
+import in.tech_camp.protospace_kcs.form.UserForm;
 import in.tech_camp.protospace_kcs.repository.UserRepository;
 
 @Controller
@@ -19,11 +20,17 @@ public class UserController {
 
 
 // 登録フォーム表示
+    //@GetMapping("/new")
+    //public String showForm(Model model) {
+    //    model.addAttribute("user", new UserEntity(null, "", "", "", "", "", ""));
+    //    return "users/new"; // → templates/users/new.html
+    //}
+
     @GetMapping("/new")
-    public String showForm(Model model) {
-        model.addAttribute("user", new UserEntity(null, "", "", "", "", "", ""));
-        return "users/new"; // → templates/users/new.html
-    }
+     public String showForm(Model model) {
+     model.addAttribute("userForm", new UserForm());
+    return "users/new";}
+
 
      // 登録処理
     @PostMapping("/users")
