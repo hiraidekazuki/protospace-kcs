@@ -29,7 +29,7 @@ public class UserController {
     @PostMapping("/users")
     public String create(@ModelAttribute UserEntity user) {
         userRepository.insert(user);
-        return "redirect:/users"; // 一覧表示などにリダイレクト
+        return "redirect:/users"; // 一覧表示などにリダイレクト 6/10 一覧表示へ飛ぶように編集を行う。
     }
 }
   

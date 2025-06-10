@@ -1,21 +1,84 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
+<html>
+  <head>
     <meta charset="UTF-8">
-    <title>ユーザー登録</title>
-</head>
-<body>
-    <h1>ユーザー登録フォーム</h1>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProtoSpace</title>
 
-    <form th:action="@{/users}" th:object="${user}" method="post">
-        <label>Email: <input type="email" th:field="*{email}" /></label><br/>
-        <label>パスワード: <input type="password" th:field="*{password}" /></label><br/>
-        <label>ユーザー名: <input type="text" th:field="*{name}" /></label><br/>
-        <label>プロフィール: <textarea th:field="*{profile}"></textarea></label><br/>
-        <label>所属: <input type="text" th:field="*{group_name}" /></label><br/>
-        <label>役職: <input type="text" th:field="*{post}" /></label><br/>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet">
+  </head>
 
-        <button type="submit">登録</button>
-    </form>
+  <body>
+    <header class="header">
+      <div class="inner">
+        <div class="nav">
+          <div class="nav__left">
+            <a href="/">
+            <img class="logo" src="/images/logo-b99f177af8fb82de2d6d7b86e95c7f329d3d143edd8b225bc2875ad9dd6e0cc3.png">
+            </a>
+          </div>
+            <div class="nav__right">
+              <a class="nav__btn" href="/users/sign_in">ログイン</a>
+              <a class="nav__btn" href="/users/sign_up">新規登録</a>
+            </div>
+        </div>
+      </div>
+    </header>
+    <div class="main">
+  <div class="inner">
+    <div class="form__wrapper">
+      <h2 class="page-heading">ユーザー新規登録</h2>
+        <form action="/users" accept-charset="UTF-8" method="post"><input type="hidden" name="authenticity_token" value="GfsMEvRcfqgdSH6K1T6TtZfZCwJkcsWKng7SHDAVEGgF2YHr20WahNqBq3i3DCeY0RWzl9DRU8Aza/UED1WhYg==" autocomplete="off">
+
+        <div class="field">
+          <label for="user_email">メールアドレス</label><br>
+          <input autofocus="autofocus" autocomplete="email" type="email" value="" name="user[email]" id="user_email">
+        </div>
+
+        <div class="field">
+          <label for="user_password">パスワード（6文字以上）</label><br>
+          <input autocomplete="new-password" type="password" name="user[password]" id="user_password">
+        </div>
+
+        <div class="field">
+          <label for="user_password_confirmation">パスワード再入力</label><br>
+          <input autocomplete="new-password" type="password" name="user[password_confirmation]" id="user_password_confirmation">
+        </div>
+
+        <div class="field">
+          <label for="user_name">ユーザー名</label><br>
+          <input type="text" name="user[name]" id="user_name">
+        </div>
+
+        <div class="field">
+          <label for="user_profile">プロフィール</label><br>
+          <textarea class="form__text" name="user[profile]" id="user_profile"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="user_occupation">所属</label><br>
+          <textarea class="form__text" name="user[occupation]" id="user_occupation"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="user_position">役職</label><br>
+          <textarea class="form__text" name="user[position]" id="user_position"></textarea>
+        </div>
+
+        <div class="actions">
+          <input type="submit" name="commit" value="新規登録" class="form__btn" data-disable-with="新規登録">
+        </div>
+     </form>    
+    </div>
+  </div>
+</div>
+    <footer class="footer">
+      <p class="copyright">Copyright © PROTO SPACE All rights reserved.</p>
+    </footer>
+  
+
 </body>
+  <div id="assetViewWebExtension3_elmId_fileUploadAstExtDiv" style="display: none;">
+ </div>
 </html>
