@@ -1,4 +1,4 @@
-package in.tech_camp.protospace.config;
+package in.tech_camp.protospace;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
