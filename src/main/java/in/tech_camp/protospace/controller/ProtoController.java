@@ -1,3 +1,4 @@
+プロトタイプ-一覧表示機能
 package in.tech_camp.protospace.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,16 @@ public class ProtoController {
 
     @Autowired
     private ProtoRepository protoRepository;
+
+    @GetMapping("/")
+    public String showRoot() {
+        return "protos/index";
+    }
+
+    @GetMapping("/index")
+    public String showIndex(Model model) {
+        return "protos/index";
+    }
 
     @GetMapping("/protos/new")
     public String showProtoNew(Model model) {

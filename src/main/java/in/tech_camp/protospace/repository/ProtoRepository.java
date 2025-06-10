@@ -1,6 +1,6 @@
 package in.tech_camp.protospace.repository;
 
-import java.util.List
+import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
