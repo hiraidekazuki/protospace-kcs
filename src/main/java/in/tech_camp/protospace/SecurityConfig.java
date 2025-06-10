@@ -28,8 +28,8 @@ public class SecurityConfig {
                     "/images/**", 
                     "/users/sign_up", 
                     "/users/login", 
-                    "/tweets/{id:[0-9]+}", 
-                    "/users/{id:[0-9]+}", 
+                    "/tweets/{id:[*]+}", 
+                    "/users/{id:[*]+}", 
                     "/tweets/search"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
