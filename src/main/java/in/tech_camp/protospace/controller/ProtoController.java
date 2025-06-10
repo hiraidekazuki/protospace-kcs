@@ -3,6 +3,7 @@ package in.tech_camp.protospace.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,20 +32,30 @@ public class ProtoController {
     }
 
     @PostMapping("/protos")
-    public String createProto(@ModelAttribute("protoForm") ProtoForm protoForm) {
-        ProtoEntity proto = new ProtoEntity();
-        proto.setName(protoForm.getName());
-        proto.setCatchcopy(protoForm.getCatchcopy());
-        proto.setConcept(protoForm.getConcept());
-        proto.setImage(protoForm.getImage());
-
-        try {
-            protoRepository.save(proto);
-        } catch (Exception e) {
-            System.out.println("エラー：" + e);
-            return "redirect:/protos/new";
-        }
-
-        return "redirect:/";
+public String createProto(
+    @Valid @ModelAttribute("protoForm") ProtoForm protoForm,
+    BindingResult bindingResult,   
+    Model model                    
+) {
+    if (bindingResult.hasErrors()) {
+        // バリデーションエラーあり → 入力画面に戻す
+        return "protos/new";
     }
+
+    ProtoEntity proto = new ProtoEntity();
+    proto.setName(protoForm.getName());
+    proto.setCatchcopy(protoForm.getCatchcopy());
+    proto.setConcept(protoForm.getConcept());
+    proto.setImage(protoForm.getImage());
+
+    try {
+        protoRepository.save(proto);
+    } catch (Exception e) {
+        System.out.println("エラー：" + e);
+        return "redirect:/protos/new";
+    }
+
+    return "redirect:/";
+}
+
 }
