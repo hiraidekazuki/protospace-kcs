@@ -1,8 +1,11 @@
 package in.tech_camp.protospace;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -10,43 +13,40 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import in.tech_camp.protospace.service.CustomUserDetailsService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
+    // 🔐 セキュリティルールの定義
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // CSRF無効化（必要に応じて設定）
             .csrf(AbstractHttpConfigurer::disable)
-
-            // アクセス許可の設定
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/", 
                     "/css/**", 
                     "/images/**", 
-                    "/users/sign_up", 
                     "/users/login", 
-                    "/tweets/{id:[*]+}", 
-                    "/users/{id:[*]+}", 
-                    "/tweets/search"
+                    "/users/sign_up", 
+                    "/users/*", 
+                    "/protos/*"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .anyRequest().authenticated()
             )
-            
-            // ログイン設定
             .formLogin(form -> form
-                .loginProcessingUrl("/login")
                 .loginPage("/users/login")
+                .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
-                .failureUrl("/users/login?error")
                 .usernameParameter("email")
                 .permitAll()
             )
-            
-            // ログアウト設定
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
@@ -56,8 +56,15 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // 🔑 パスワードエンコーダー
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // ✅ 推奨される認証マネージャーの定義方法
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 }
