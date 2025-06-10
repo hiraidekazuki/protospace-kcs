@@ -27,6 +27,11 @@ public class ProtoController {
         return "protos/index";
     }
 
+    @GetMapping("/users/login")
+    public String showLoginForm() {
+        return "users/login";  // users/login.html を表示
+    }
+
     @GetMapping("/protos/new")
     public String showProtoNew(Model model) {
         // 空のフォームオブジェクトをセット
