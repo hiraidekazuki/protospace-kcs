@@ -19,6 +19,13 @@ public class ProtoController {
     @Autowired
     private ProtoRepository protoRepository;
 
+    @GetMapping("/")
+    public String showIndex(Model model) {
+        model.addAttribute("protos", protoRepository.findAll()); // 投稿一覧を取得
+        return "protos/index"; 
+        }
+
+
     @GetMapping("/protos/new")
     public String showProtoNew(Model model) {
         ProtoForm dummyForm = new ProtoForm();
