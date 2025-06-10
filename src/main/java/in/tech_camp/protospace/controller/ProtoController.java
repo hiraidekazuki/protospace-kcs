@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import in.tech_camp.protospace.entity.ProtoEntity;
 import in.tech_camp.protospace.form.ProtoForm;
 import in.tech_camp.protospace.repository.ProtoRepository;
+import jakarta.validation.Valid;
 
 @Controller
 public class ProtoController {

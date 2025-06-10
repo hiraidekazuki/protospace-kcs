@@ -13,11 +13,19 @@
     <div class="container">
       <h3>保存する</h3>
       <form th:action="@{/protos}" th:method="post" th:object="${protoForm}">
-       <input type="text" th:field="*{name}" placeholder="プロトタイプの名前" />
-       <input type="text" th:field="*{catchcopy}" placeholder="キャッチコピー" />
-       <textarea th:field="*{concept}" placeholder="コンセプト" rows="10"></textarea>
-       <input type="text" th:field="*{image}" placeholder="画像のURLまたはファイル名" />
-       <input type="submit" value="SAVE" />
+        <input type="text" th:field="*{name}" placeholder="プロトタイプ名" />
+        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></p>
+
+        <input type="text" th:field="*{catchcopy}" placeholder="キャッチコピー" />
+        <p th:if="${#fields.hasErrors('catchcopy')}" th:errors="*{catchcopy}" class="error"></p>
+
+        <textarea th:field="*{concept}" placeholder="コンセプト" rows="10"></textarea>
+        <p th:if="${#fields.hasErrors('concept')}" th:errors="*{concept}" class="error"></p>
+
+        <input type="text" th:field="*{image}" placeholder="画像のURLまたはファイル名" />
+        <p th:if="${#fields.hasErrors('image')}" th:errors="*{image}" class="error"></p>
+
+        <input type="submit" value="SAVE" />
       </form>
     </div>
   </div>
