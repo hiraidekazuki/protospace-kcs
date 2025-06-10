@@ -18,10 +18,14 @@ public interface UserRepository {
     @Select("SELECT * FROM users WHERE email = #{email}") //ログイン時にそのメールアドレスのユーザーが存在するかの確認
     UserEntity findByEmail(String email);
 
+    @Select("SELECT COUNT(*) > 0 FROM users WHERE email = #{email}")
+    boolean existsByEmail(String email);  // ← 追加
+
     @Insert("""
-        INSERT INTO users (email, password, name, profile, group_name, post)
-        VALUES (#{email}, #{password}, #{name}, #{profile}, #{group_name}, #{post})
+        INSERT INTO users (email, password, name, profile, groupName, post)
+        VALUES (#{email}, #{password}, #{name}, #{profile}, #{groupName}, #{post})
     """)
+
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(UserEntity user);
 
