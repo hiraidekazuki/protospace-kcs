@@ -33,7 +33,7 @@ public class ProtoController {
     }
 
     @PostMapping("/protos")
-public String createProto(
+    public String createProto(
     @Valid @ModelAttribute("protoForm") ProtoForm protoForm,
     BindingResult bindingResult,   
     Model model                    
@@ -58,5 +58,6 @@ public String createProto(
 
     return "redirect:/";
 }
+
 
 }
