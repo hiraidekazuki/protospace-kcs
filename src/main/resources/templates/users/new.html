@@ -29,47 +29,48 @@
   <div class="inner">
     <div class="form__wrapper">
       <h2 class="page-heading">ユーザー新規登録</h2>
-        <form action="/users" accept-charset="UTF-8" method="post"><input type="hidden" name="authenticity_token" value="GfsMEvRcfqgdSH6K1T6TtZfZCwJkcsWKng7SHDAVEGgF2YHr20WahNqBq3i3DCeY0RWzl9DRU8Aza/UED1WhYg==" autocomplete="off">
+        <form th:action="@{/users}" th:object="${userForm}" method="post">
 
         <div class="field">
-          <label for="user_email">メールアドレス</label><br>
-          <input autofocus="autofocus" autocomplete="email" type="email" value="" name="email" id="user_email">
+         <label>メールアドレス</label><br>
+         <input type="email" th:field="*{email}" />
+       </div>
+
+       <div class="field">
+         <label>パスワード（6文字以上）</label><br>
+         <input type="password" th:field="*{password}" />
+       </div>
+
+       <div class="field">
+         <label>パスワード再入力</label><br>
+         <input type="password" th:field="*{passwordConfirmation}" />
+       </div>
+
+       <div class="field">
+         <label>ユーザー名</label><br>
+          <input type="text" th:field="*{name}" />
+       </div>
+
+       <div class="field">
+         <label>プロフィール</label><br>
+         <textarea th:field="*{profile}"></textarea>
+       </div>
+
+       <div class="field">
+         <label>所属</label><br>
+         <textarea th:field="*{groupName}"></textarea>
         </div>
 
-        <div class="field">
-          <label for="user_password">パスワード（6文字以上）</label><br>
-          <input autocomplete="new-password" type="password" name="password" id="user_password">
-        </div>
+       <div class="field">
+         <label>役職</label><br>
+          <textarea th:field="*{post}"></textarea>
+       </div>
 
-        <div class="field">
-          <label for="user_password_confirmation">パスワード再入力</label><br>
-          <input autocomplete="new-password" type="password" name="password_confirmation" id="user_password_confirmation">
-        </div>
-
-        <div class="field">
-          <label for="user_name">ユーザー名</label><br>
-          <input type="text" name="name" id="user_name">
-        </div>
-
-        <div class="field">
-          <label for="user_profile">プロフィール</label><br>
-          <textarea class="form__text" name="profile" id="user_profile"></textarea>
-        </div>
-
-        <div class="field">
-          <label for="user_group_name">所属</label><br>
-          <textarea class="form__text" name="group_name" id="user_group_name"></textarea>
-        </div>
-
-        <div class="field">
-          <label for="user_post">役職</label><br>
-          <textarea class="form__text" name="post" id="user_post"></textarea>
-        </div>
-
-        <div class="actions">
-          <input type="submit" name="commit" value="新規登録" class="form__btn" data-disable-with="新規登録">
-        </div>
-     </form>    
+     <div class="actions">
+       <input type="submit" value="新規登録" />
+     </div>
+   </form>
+       
     </div>
   </div>
 </div>
