@@ -11,16 +11,16 @@ public class UserEntity {
   private String password;
   private String name;
   private String profile;
-  private String group_name;
+  private String groupName;
   private String post;
 
-   public UserEntity(Integer id, String email, String password, String name, String profile, String group_name, String post) {
+   public UserEntity(Integer id, String email, String password, String name, String profile, String groupName, String post) {
        this.id = id;
        this.email = email;
        this.password = password;
        this.name = name;
        this.profile = profile;
-       this.group_name = group_name; 
+       this.groupName = groupName; 
        this.post = post;
     }
 }
