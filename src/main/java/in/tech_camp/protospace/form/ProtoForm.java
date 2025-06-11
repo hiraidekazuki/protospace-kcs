@@ -1,19 +1,22 @@
 package in.tech_camp.protospace.form;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class ProtoForm {
+
     @NotBlank(message = "プロトタイプ名は必須です")
-    private String name;        // プロトタイプの名前
-    
+    private String name;
+
     @NotBlank(message = "キャッチコピーは必須です")
-    private String catchcopy;   // キャッチコピー
+    private String catchcopy;
 
-    @NotBlank(message="コンセプトは必須です")
-    private String concept;     // コンセプト
+    @NotBlank(message = "コンセプトは必須です")
+    private String concept;
 
-    @NotBlank(message="画像は1枚必須です")
-    private String image;       // 画像のファイル名 or URL
+    private MultipartFile image; 
+
 }
