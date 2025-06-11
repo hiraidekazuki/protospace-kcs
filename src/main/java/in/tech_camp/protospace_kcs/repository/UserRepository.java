@@ -31,4 +31,5 @@ public interface UserRepository {
 
     @Select("SELECT * FROM users")
     List<UserEntity> findAll();
+
 }

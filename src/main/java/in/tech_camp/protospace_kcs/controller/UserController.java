@@ -64,7 +64,9 @@ public class UserController {
         user.setPost(form.getPost());
 
         // パスワードはハッシュ化 (例: BCryptなど)
+
         String hashedPassword = passwordEncoder.encode((CharSequence) form.getPassword());
+
         user.setPassword(hashedPassword);
 
         // データベースに保存
@@ -88,5 +90,6 @@ public String mypage(Model model, Principal principal) {
     model.addAttribute("email", email);
     return "users/mypage";
 }
+   
 }
   
