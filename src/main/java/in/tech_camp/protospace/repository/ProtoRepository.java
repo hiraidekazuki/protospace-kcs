@@ -18,4 +18,9 @@ public interface ProtoRepository {
 
   @Select("SELECT * FROM protos")
   List<ProtoEntity> findAll();
+
+  // ここをstaticではなく、普通のメソッドで宣言しSQLも書く
+  @Select("SELECT * FROM protos WHERE id = #{id}")
+  ProtoEntity findById(Integer id);
+
 }

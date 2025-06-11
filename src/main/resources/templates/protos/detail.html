@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProtoSpace</title>
+</head>
+
+<body>
+
+<!-- 共通ヘッダー -->
+<div th:insert="~{header :: header}"></div>
+
+<main class="main">
+  <div class="inner">
+    <div class="prototype__wrapper">
+      <p class="prototype__hedding" th:text="${proto.catchCopy}">キャッチコピー</p>
+      
+      <!-- ユーザー名リンクのnullチェック追加 -->
+      <a class="prototype__user"
+         th:if="${proto.user != null}"
+         th:href="@{/users/{id}(id=${proto.user.id})}"
+         th:text="'by ' + ${proto.user.name}"></a>
+      <span th:if="${proto.user == null}">by 未登録ユーザー</span>
+
+      <div class="prototype__manage">
+        <form th:action="@{/protos/{protoId}/update(protoId=${proto.id})}" method="post">
+          <input type="submit" class="prototype__btn" value="編集する">
+        </form>
+        <form th:action="@{/protos/{protoId}/delete(protoId=${proto.id})}" method="post">
+          <input type="submit" class="prototype__btn" value="削除する">
+        </form>
+      </div>
+
+      <div class="prototype__image">
+        <img th:src="@{${proto.image}}" alt="プロトタイプ画像">
+      </div>
+
+      <div class="prototype__body">
+        <div class="prototype__detail">
+          <p class="detail__title">キャッチコピー</p>
+          <p class="detail__message" th:text="${proto.catchCopy}"></p>
+        </div>
+        <div class="prototype__detail">
+          <p class="detail__title">コンセプト</p>
+          <p class="detail__message" th:text="${proto.concept}"></p>
+        </div>
+      </div>
+
+      <div class="prototype__comments">
+        <!-- コメントフォーム修正 -->
+        <form th:action="@{/protos/{protoId}/comments(protoId=${proto.id})}" method="post" th:object="${comment}">
+          <div class="field">
+            <label for="comment_content">コメント</label><br>
+            <input type="text" th:field="*{content}" id="comment_content">
+          </div>
+          <div class="actions">
+            <input type="submit" value="送信する" class="form__btn">
+          </div>
+        </form>
+
+        <!-- コメントリスト表示の条件制御
+        <ul class="comments_lists" th:if="${#lists.isNotEmpty(proto.comments)}">
+          <li th:each="comment : ${proto.comments}" th:text="${comment.content}"></li>
+        </ul>
+        <p th:if="${#lists.isEmpty(proto.comments)}">まだコメントはありません。</p>
+      </div>
+    </div>
+  </div>
+</main> -->
+
+<!-- 共通フッター -->
+<div th:insert="~{footer :: footer}"></div>
+
+</body>
+</html>
