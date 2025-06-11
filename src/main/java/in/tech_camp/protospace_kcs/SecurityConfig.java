@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,10 +11,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
+     @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-      .csrf(AbstractHttpConfigurer::disable)
+      //.csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(authorizeRequests -> authorizeRequests
         //以下でログアウト状態でも実行できるGETリクエストを記述する
         .requestMatchers("/css/**", "/users/sign_up", "/users/login").permitAll()
@@ -30,7 +29,7 @@ public class SecurityConfig {
         //ログインページのパスを設定
         .loginPage("/users/login")
         //ログイン成功後のリダイレクト先
-        .defaultSuccessUrl("/", true)
+        .defaultSuccessUrl("/users/mypage", true)//仮のマイページ
         //ログイン失敗後のリダイレクト先
         .failureUrl("/login?error")
         .usernameParameter("email")
@@ -48,17 +47,5 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-     // Spring Securityのフィルタ設定：すべてのリクエストを許可
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(authz -> authz
-                .anyRequest().permitAll() // すべてのリクエストを認可（ログイン不要）
-            )
-            .csrf().disable(); // 開発中はCSRF無効に（POSTエラー防止）
-
-        return http.build();
     }
 }
