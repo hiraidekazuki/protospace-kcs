@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import in.tech_camp.protospace.custom_user.CustomUserDetails;
 import in.tech_camp.protospace.entity.ProtoEntity;
 import in.tech_camp.protospace.form.ProtoForm;
-import in.tech_camp.protospace.repository.ProtoRepository; // パッケージ名注意
+import in.tech_camp.protospace.repository.ProtoRepository;
 
 @Controller
 public class ProtoController {
@@ -36,15 +36,10 @@ public class ProtoController {
         return "protos/index";
     }
 
-    @GetMapping("/protos/new")
-    public String showProtoNew(Model model) {
-        ProtoForm dummyForm = new ProtoForm();
-        dummyForm.setName("");
-        dummyForm.setCatchcopy("");
-        dummyForm.setConcept("");
-        dummyForm.setImage("");
-
-        model.addAttribute("protoForm", dummyForm);
+// 投稿ページ（新規投稿表示）
+    @GetMapping("/new")
+        public String showNewForm(Model model) {
+            model.addAttribute("protoForm", new ProtoForm());
         return "protos/new";
     }
 
