@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
 import in.tech_camp.protospace.entity.ProtoEntity;
@@ -12,10 +14,26 @@ import in.tech_camp.protospace.entity.ProtoEntity;
 @Mapper
 public interface ProtoRepository {
 
-  @Select("SELECT * FROM protos")
+  @Select("SELECT p.id, p.name, p.catchcopy, p.concept, p.image, p.user_id, " +
+          "u.name AS user_name " +
+          "FROM protos p " +
+          "JOIN users u ON p.user_id = u.id " +
+          "ORDER BY p.id DESC")
+  @Results({
+      @Result(property = "id", column = "id"),
+      @Result(property = "name", column = "name"),
+      @Result(property = "catchcopy", column = "catchcopy"),
+      @Result(property = "concept", column = "concept"),
+      @Result(property = "image", column = "image"),
+      @Result(property = "userId", column = "user_id"),
+      // ネストする user オブジェクトへのマッピング
+      @Result(property = "user.id", column = "user_id"),
+      @Result(property = "user.name", column = "user_name")
+  })
   List<ProtoEntity> findAll();
 
-  @Insert("INSERT INTO protos (name, catchcopy, concept, image, user_name) VALUES (#{name}, #{catchcopy}, #{concept}, #{image}, #{user_name})")
+  @Insert("INSERT INTO protos (name, catchcopy, concept, image, user_id) " +
+          "VALUES (#{name}, #{catchcopy}, #{concept}, #{image}, #{userId})")
   @Options(useGeneratedKeys = true, keyProperty = "id")
   void insert(ProtoEntity proto);
 

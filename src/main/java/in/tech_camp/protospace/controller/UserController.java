@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class UserController {
 
-    @GetMapping("/users/login")
+    // /login にアクセスしたとき login.html を表示
+    @GetMapping("/login")
     public String showLoginForm() {
-        return "users/login";  // users/login.html を表示
+        return "login";  // templates/login.html を表示
     }
 }

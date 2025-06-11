@@ -1,15 +1,19 @@
 package in.tech_camp.protospace.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import in.tech_camp.protospace.custom_user.CustomUserDetails;
 import in.tech_camp.protospace.entity.ProtoEntity;
 import in.tech_camp.protospace.form.ProtoForm;
-import in.tech_camp.protospace.repository.ProtoRepository;
+import in.tech_camp.protospace.repository.ProtoRepository; // パッケージ名注意
 
 @Controller
 public class ProtoController {
@@ -17,24 +21,23 @@ public class ProtoController {
     @Autowired
     private ProtoRepository protoRepository;
 
-    @GetMapping("/")
-    public String showRoot() {
-        return "protos/index";
-    }
+    // トップ・新規投稿画面共通表示
+    @GetMapping({"/", "/index"})
+    public String showNewForm(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        List<ProtoEntity> prototypes = protoRepository.findAll();
 
-    @GetMapping("/index")
-    public String showIndex(Model model) {
-        return "protos/index";
-    }
+        model.addAttribute("prototypes", prototypes);
+        model.addAttribute("protoForm", new ProtoForm());
 
-    @GetMapping("/users/login")
-    public String showLoginForm() {
-        return "users/login";  // users/login.html を表示
+        if (userDetails != null) {
+            model.addAttribute("user", userDetails.getUserEntity());  // ← ここを修正
+        }
+
+        return "protos/index";
     }
 
     @GetMapping("/protos/new")
     public String showProtoNew(Model model) {
-        // 空のフォームオブジェクトをセット
         ProtoForm dummyForm = new ProtoForm();
         dummyForm.setName("");
         dummyForm.setCatchcopy("");
@@ -42,12 +45,11 @@ public class ProtoController {
         dummyForm.setImage("");
 
         model.addAttribute("protoForm", dummyForm);
-        return "protos/new"; // new.htmlを表示
+        return "protos/new";
     }
 
     @PostMapping("/protos")
     public String createProto(@ModelAttribute("protoForm") ProtoForm protoForm) {
-        // FormからEntityに値をコピー
         ProtoEntity proto = new ProtoEntity();
         proto.setName(protoForm.getName());
         proto.setCatchcopy(protoForm.getCatchcopy());
@@ -55,12 +57,12 @@ public class ProtoController {
         proto.setImage(protoForm.getImage());
 
         try {
-            protoRepository.insert(proto);  
+            protoRepository.insert(proto);
         } catch (Exception e) {
             System.out.println("エラー：" + e);
-            return "redirect:/protos/new"; 
+            return "redirect:/protos/new";
         }
 
-        return "redirect:/"; 
+        return "redirect:/";
     }
 }

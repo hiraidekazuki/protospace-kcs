@@ -3,6 +3,10 @@ CREATE TABLE protos (
     name TEXT NOT NULL,
     catchcopy TEXT NOT NULL,
     concept TEXT NOT NULL,
-    image TEXT, -- ファイル名やURLなどを格納
-    user_name TEXT NOT NULL
+    image TEXT,
+    user_id INTEGER NOT NULL,
+    CONSTRAINT fk_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
 );
