@@ -1,5 +1,7 @@
 package in.tech_camp.protospace_kcs.controller;
 
+import java.security.Principal;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,8 +9,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import in.tech_camp.protospace_kcs.entity.UserEntity;
+import in.tech_camp.protospace_kcs.form.LoginForm;
 import in.tech_camp.protospace_kcs.form.UserForm;
 import in.tech_camp.protospace_kcs.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -60,12 +64,29 @@ public class UserController {
         user.setPost(form.getPost());
 
         // パスワードはハッシュ化 (例: BCryptなど)
-        String hashedPassword = passwordEncoder.encode(form.getPassword());
+        String hashedPassword = passwordEncoder.encode((CharSequence) form.getPassword());
         user.setPassword(hashedPassword);
 
         // データベースに保存
         userRepository.insert(user);
         return "redirect:/users"; // 一覧表示などにリダイレクト 6/10 一覧表示へ飛ぶように編集を行う。
     }
+
+    //ログイン画面の表示
+  @GetMapping("/users/login")
+   public String loginForm(@RequestParam(value = "error", required = false) String error, Model model) {
+    model.addAttribute("loginForm", new LoginForm());
+    if (error != null) {
+        model.addAttribute("loginError", "メールアドレスかパスワードが間違っています。");
+    }
+    return "users/login";
+}
+
+  @GetMapping("/users/mypage")
+public String mypage(Model model, Principal principal) {
+    String email = principal.getName(); // ログインユーザーのメールを取得
+    model.addAttribute("email", email);
+    return "users/mypage";
+}
 }
   

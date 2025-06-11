@@ -23,6 +23,17 @@ public class UserEntity {
        this.groupName = groupName; 
        this.post = post;
     }
+
+    public String getPassword() {
+    return password;
+}
+
+    public void setPassword(String password) {
+    this.password = password;
+}
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
 }
 
 

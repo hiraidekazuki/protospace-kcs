@@ -30,4 +30,12 @@ public class UserForm {
 
     @NotBlank(message = "役職は必須です")
     private String post;
+
+    public String getEmail() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Object getPassword() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
