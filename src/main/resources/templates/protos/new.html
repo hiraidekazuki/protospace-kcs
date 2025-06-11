@@ -1,27 +1,64 @@
+<!-- templates/prototypes/new.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
-  <title>PRONTO SPACE</title>
+  <meta charset="UTF-8" />
+  <title>新規プロトタイプ投稿 - PROTO SPACE</title>
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
 
+  <!-- headerフラグメント -->
   <div th:insert="~{header :: header}"></div>
 
-  <div class="contents row">
-    <div class="container">
-      <h3>保存する</h3>
-      <form th:action="@{/protos}" th:method="post" th:object="${protoForm}">
-       <input type="text" th:field="*{name}" placeholder="プロトタイプの名前" />
-       <input type="text" th:field="*{catchcopy}" placeholder="キャッチコピー" />
-       <textarea th:field="*{concept}" placeholder="コンセプト" rows="10"></textarea>
-       <input type="text" th:field="*{image}" placeholder="画像のURLまたはファイル名" />
-       <input type="submit" value="SAVE" />
-      </form>
+  <div class="main">
+    <div class="inner">
+      <div class="form__wrapper">
+        <h2 class="page-heading">新規プロトタイプ投稿</h2>
+
+        <!-- フォーム -->
+        <form th:action="@{/protos}" method="post" enctype="multipart/form-data" th:object="${protoForm}">
+
+          <!-- フォーム内で全体エラー表示 -->
+          <div th:if="${#fields.hasErrors('*')}" class="error-messages">
+            <ul>
+              <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+            </ul>
+          </div>
+
+          <div class="field">
+            <label for="name">プロトタイプの名称</label><br />
+            <input type="text" id="name" th:field="*{name}" />
+          </div>
+
+          <div class="field">
+            <label for="catchcopy">キャッチコピー</label><br />
+            <textarea class="form__text" id="catchcopy" th:field="*{catchcopy}"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="concept">コンセプト</label><br />
+            <textarea class="form__text" id="concept" th:field="*{concept}"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="image">プロトタイプの画像</label><br />
+            <input type="file" id="image" th:field="*{image}" accept="image/*" />
+          </div>
+
+          <div th:if="${message?.image}">
+            <img th:src="@{${message.image}}" alt="アップロード画像" style="width: 500px; height: 500px;" />
+          </div>
+
+          <div class="actions">
+            <input type="submit" value="保存する" class="form__btn" />
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 
+  <!-- footerフラグメント -->
   <div th:insert="~{footer :: footer}"></div>
 
 </body>

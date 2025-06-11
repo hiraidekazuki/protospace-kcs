@@ -35,6 +35,8 @@ public interface ProtoRepository {
   @Insert("INSERT INTO protos (name, catchcopy, concept, image, user_id) " +
           "VALUES (#{name}, #{catchcopy}, #{concept}, #{image}, #{userId})")
   @Options(useGeneratedKeys = true, keyProperty = "id")
-  void insert(ProtoEntity proto);
+  void save(ProtoEntity proto);
 
+  @Select("SELECT * FROM protos")
+  List<ProtoEntity> findAll();
 }
