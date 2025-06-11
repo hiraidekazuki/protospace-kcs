@@ -34,11 +34,5 @@ public class UserForm {
     public UserForm() {
     }
 
-    public String getEmail() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Object getPassword() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    // 不要な getter は削除！Lombok に任せましょう。
 }

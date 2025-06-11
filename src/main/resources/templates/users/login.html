@@ -2,8 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>ProtoSpace - ログイン</title>
-  <link rel="stylesheet" href="/assets/application.css" media="all">
+  <!--link rel="stylesheet" href="/assets/application.css" media="all"-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -11,10 +13,10 @@
     <div class="inner">
       <div class="nav">
         <div class="nav__left">
-          <a th:href="@{/}"><img class="logo" src="/assets/logo.png" alt="ProtoSpace ロゴ"></a>
+          <a th:href="@{/}"><img class="logo" src="/images/logo-b99f177af8fb82de2d6d7b86e95c7f329d3d143edd8b225bc2875ad9dd6e0cc3.png" alt="ProtoSpace ロゴ"></a>
         </div>
         <div class="nav__right">
-          <a class="nav__btn" th:href="@{/users/sign_in}">ログイン</a>
+          <a class="nav__btn" th:href="@{/users/login}">ログイン</a>
           <a class="nav__btn" th:href="@{/users/sign_up}">新規登録</a>
         </div>
       </div>

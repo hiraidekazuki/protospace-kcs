@@ -28,7 +28,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/new")
+    @GetMapping("/users/sign_up")
      public String showForm(Model model) {
      model.addAttribute("userForm", new UserForm());
       return "users/new";
@@ -36,10 +36,10 @@ public class UserController {
 
 
      // 登録処理
-    @PostMapping("/users")
+    @PostMapping("/user")
     public String create(@ModelAttribute @Valid UserForm form, 
                          BindingResult result,
-                         Model model ){
+                         Model model) {
                 
                  // パスワード確認チェック
         if (!form.getPassword().equals(form.getPasswordConfirmation())) {
@@ -71,7 +71,8 @@ public class UserController {
 
         // データベースに保存
         userRepository.insert(user);
-        return "redirect:/users"; // 一覧表示などにリダイレクト 6/10 一覧表示へ飛ぶように編集を行う。
+
+        return "redirect:/users/mypage"; // 一覧表示などにリダイレクト 
     }
 
     //ログイン画面の表示
@@ -84,6 +85,7 @@ public class UserController {
     return "users/login";
 }
 
+//トップページ
 @GetMapping("/users/mypage")
 public String mypage(Model model, @AuthenticationPrincipal CustomUserDetail userDetail) {
     model.addAttribute("email", userDetail.getUsername()); // メールアドレス

@@ -11,13 +11,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-     @Bean
+  @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
       //.csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(authorizeRequests -> authorizeRequests
         //以下でログアウト状態でも実行できるGETリクエストを記述する
-        .requestMatchers("/css/**", "/users/sign_up", "/users/login").permitAll()
+        .requestMatchers("/css/**", "/users/sign_up", "/users/login","/images/**").permitAll()
         //以下でログアウト状態でも実行できるPOSTリクエストを記述する
         .requestMatchers(HttpMethod.POST, "/user").permitAll()
         //上記以外のリクエストは認証されたユーザーのみ許可される(要ログイン)
