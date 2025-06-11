@@ -99,7 +99,7 @@ public class ProtoController {
             return "error"; // 適切なエラーページに切り替えてください
         }
 
-        // コメントフォームオブジェクトをモデルに追加（ここが今回の修正箇所）
+        // コメントフォームオブジェクトをモデルに追加
         model.addAttribute("comment", new CommentForm());
 
         // 仮ユーザー情報セット（nullチェック）
