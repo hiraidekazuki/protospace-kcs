@@ -1,7 +1,6 @@
 package in.tech_camp.protospace_kcs.controller;
 
-import java.security.Principal;
-
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import in.tech_camp.protospace_kcs.custom_user.CustomUserDetail;
 import in.tech_camp.protospace_kcs.entity.UserEntity;
 import in.tech_camp.protospace_kcs.form.LoginForm;
 import in.tech_camp.protospace_kcs.form.UserForm;
@@ -84,10 +84,10 @@ public class UserController {
     return "users/login";
 }
 
-  @GetMapping("/users/mypage")
-public String mypage(Model model, Principal principal) {
-    String email = principal.getName(); // ログインユーザーのメールを取得
-    model.addAttribute("email", email);
+@GetMapping("/users/mypage")
+public String mypage(Model model, @AuthenticationPrincipal CustomUserDetail userDetail) {
+    model.addAttribute("email", userDetail.getUsername()); // メールアドレス
+    model.addAttribute("name", userDetail.getName());      // 表示名（UserEntityのname）
     return "users/mypage";
 }
    

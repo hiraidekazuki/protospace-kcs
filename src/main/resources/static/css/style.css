@@ -2,7 +2,17 @@
   display: none;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
 .body{
+    display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   color: #3b4043;
   box-sizing: border-box;
 }
@@ -33,6 +43,12 @@
 .main{
   margin: 0px;
   padding: 0px;
+  flex: 1; /* 中央のmainを伸ばしてfooterを下に押す */
+}
+
+.welcome {
+     flex: 1;
+     padding: 20px 40px 40px 40px;
 }
 
 .inner{
@@ -187,10 +203,14 @@ input[type="hidden" i] {
 }
 
 .footer{
-    background-color: #999;
-    padding: 10px 0;
-    display: block;
-    unicode-bidi: isolate;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #999;
+  padding: 10px 0;
+  z-index: 1000; /* 他の要素より前面に */
+  text-align: center;
 }
 
 p {
