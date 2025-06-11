@@ -4,11 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import in.tech_camp.protospace.custom_user.CustomUserDetails;
 import in.tech_camp.protospace.entity.ProtoEntity;
@@ -18,44 +21,60 @@ import in.tech_camp.protospace.repository.ProtoRepository;
 @Controller
 public class ProtoController {
 
-    @Autowired
-    private ProtoRepository protoRepository;
+    private final ImageUrl imageUrl;
+    private final ProtoRepository protoRepository;
 
-    // トップ・新規投稿画面共通表示
-    @GetMapping({"/", "/index"})
-    public String showNewForm(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        List<ProtoEntity> prototypes = protoRepository.findAll();
-
-        model.addAttribute("prototypes", prototypes);
-        model.addAttribute("protoForm", new ProtoForm());
-
-        if (userDetails != null) {
-            model.addAttribute("user", userDetails.getUserEntity());  // ← ここを修正
-        }
-
-        return "protos/index";
+    public ProtoController(ImageUrl imageUrl, ProtoRepository protoRepository) {
+        this.imageUrl = imageUrl;
+        this.protoRepository = protoRepository;
     }
 
-// 投稿ページ（新規投稿表示）
-    @GetMapping("/new")
-        public String showNewForm(Model model) {
-            model.addAttribute("protoForm", new ProtoForm());
+    // // トップ・新規投稿画面共通表示
+    @GetMapping({"/", "/new"})
+    public String showNewForm(Model model) {
+        model.addAttribute("protoForm", new ProtoForm());
+        return "protos/new";
+    }
+    
+    // 投稿作成処理
+    @PostMapping("/protos")
+    public String createProto(
+        @Valid @ModelAttribute("protoForm") ProtoForm protoForm,
+        BindingResult bindingResult,
+        Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            return "protos/new";
+        }
+
+    @GetMapping("/protos/new")
+    public String showProtoNew(Model model) {
+        ProtoForm dummyForm = new ProtoForm();
+        dummyForm.setName("");
+        dummyForm.setCatchcopy("");
+        dummyForm.setConcept("");
+        dummyForm.setImage("");
+
+        model.addAttribute("protoForm", dummyForm);
         return "protos/new";
     }
 
     @PostMapping("/protos")
     public String createProto(@ModelAttribute("protoForm") ProtoForm protoForm) {
+
         ProtoEntity proto = new ProtoEntity();
         proto.setName(protoForm.getName());
         proto.setCatchcopy(protoForm.getCatchcopy());
         proto.setConcept(protoForm.getConcept());
-        proto.setImage(protoForm.getImage());
+        proto.setImage(fileName != null ? "/uploads/" + fileName : null);
+        proto.setUser_name("test_user"); 
 
         try {
             protoRepository.insert(proto);
         } catch (Exception e) {
             System.out.println("エラー：" + e);
             return "redirect:/protos/new";
+
         }
 
         return "redirect:/";
