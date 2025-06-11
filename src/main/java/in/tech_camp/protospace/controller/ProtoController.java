@@ -32,13 +32,13 @@ public class ProtoController {
         this.protoRepository = protoRepository;
     }
 
-    // トップ・新規投稿画面共通表示
+    // // トップ・新規投稿画面共通表示
     @GetMapping({"/", "/new"})
     public String showNewForm(Model model) {
         model.addAttribute("protoForm", new ProtoForm());
         return "protos/new";
     }
-
+    
     // 投稿作成処理
     @PostMapping("/protos")
     public String createProto(
@@ -59,7 +59,7 @@ public class ProtoController {
                 fileName = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
                          + "_" + imageFile.getOriginalFilename();
                 Path imagePath = Paths.get(uploadDir, fileName);
-                Files.createDirectories(imagePath.getParent()); // 念のため
+                Files.createDirectories(imagePath.getParent());
                 Files.copy(imageFile.getInputStream(), imagePath);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -73,7 +73,7 @@ public class ProtoController {
         proto.setCatchcopy(protoForm.getCatchcopy());
         proto.setConcept(protoForm.getConcept());
         proto.setImage(fileName != null ? "/uploads/" + fileName : null);
-        proto.setUser_name("test_user"); // 本番では認証ユーザーから取得すべき
+        proto.setUser_name("test_user"); 
 
         try {
             protoRepository.save(proto);

@@ -29,25 +29,21 @@
           <div class="field">
             <label for="name">プロトタイプの名称</label><br />
             <input type="text" id="name" th:field="*{name}" />
-            <p class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
           </div>
 
           <div class="field">
             <label for="catchcopy">キャッチコピー</label><br />
             <textarea class="form__text" id="catchcopy" th:field="*{catchcopy}"></textarea>
-            <p class="error" th:if="${#fields.hasErrors('catchcopy')}" th:errors="*{catchcopy}"></p>
           </div>
 
           <div class="field">
             <label for="concept">コンセプト</label><br />
             <textarea class="form__text" id="concept" th:field="*{concept}"></textarea>
-            <p class="error" th:if="${#fields.hasErrors('concept')}" th:errors="*{concept}"></p>
           </div>
 
           <div class="field">
             <label for="image">プロトタイプの画像</label><br />
             <input type="file" id="image" th:field="*{image}" accept="image/*" />
-            <p class="error" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></p>
           </div>
 
           <div th:if="${message?.image}">
