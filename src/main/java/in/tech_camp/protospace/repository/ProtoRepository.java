@@ -12,7 +12,7 @@ import in.tech_camp.protospace.entity.ProtoEntity;
 @Mapper
 public interface ProtoRepository {
 
-  @Insert("INSERT INTO protos (name, catchcopy, concept, image, user_name) VALUES (#{name}, #{catchcopy}, #{concept}, #{image}, #{user_name})")
+  @Insert("INSERT INTO protos (name, catchcopy, concept, image, userName) VALUES (#{name}, #{catchcopy}, #{concept}, #{image}, #{userName})")
   @Options(useGeneratedKeys = true, keyProperty = "id")
   void save(ProtoEntity proto);
 
