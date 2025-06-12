@@ -93,6 +93,11 @@ public class ProtoController {
         proto.setImage(fileName != null ? "/uploads/" + fileName : null);
         proto.setUserName("test_user"); // ログイン未実装の仮置き
 
+        System.out.println("=== デバッグログ ===");
+        System.out.println("フォームのname: " + protoForm.getName());
+        System.out.println("エンティティのname: " + proto.getName());
+
+
         try {
             protoRepository.save(proto); // IDがセットされる
             return "redirect:/protos"; // 保存後に詳細ページへ遷移

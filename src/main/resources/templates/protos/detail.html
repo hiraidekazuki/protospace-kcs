@@ -16,9 +16,9 @@
 <main class="main">
   <div class="inner">
     <div class="prototype__wrapper">
-      <h1 class="prototype__title" th:text="${proto.name}">プロトタイプ名</h1>
+      <!-- <h1 class="prototype__title" th:text="${proto.name}">プロトタイプ名</h1> -->
 
-      <p class="prototype__hedding" th:text="${proto.catchCopy}">キャッチコピー</p>
+      <p class="prototype__hedding" th:text="${proto.name}">プロトタイプ名</p>
       
       <!-- ユーザー名リンクのnullチェック追加 -->
       <a class="prototype__user"
@@ -27,14 +27,15 @@
          th:text="'by ' + ${proto.user.name}"></a>
       <span th:if="${proto.user == null}">by 未登録ユーザー</span>
 
-      <div class="prototype__manage">
-        <form th:action="@{/protos/{protoId}/update(protoId=${proto.id})}" method="post">
-          <input type="submit" class="prototype__btn" value="編集する">
-        </form>
-        <form th:action="@{/protos/{protoId}/delete(protoId=${proto.id})}" method="post">
-          <input type="submit" class="prototype__btn" value="削除する">
-        </form>
-      </div>
+      <!-- 編集・削除ボタンをログインしているユーザーだけに表示 -->
+      <div class="prototype__manage" th:if="${#authorization.expression('isAuthenticated()')}">
+       <form th:action="@{/protos/{protoId}/update(protoId=${proto.id})}" method="post">
+         <input type="submit" class="prototype__btn" value="編集する">
+       </form>
+       <form th:action="@{/protos/{protoId}/delete(protoId=${proto.id})}" method="post">
+         <input type="submit" class="prototype__btn" value="削除する">
+       </form>
+     </div>
 
       <div class="prototype__image">
         <img th:src="@{${proto.image}}" alt="ユーザーが投稿した画像">
@@ -67,7 +68,7 @@
         <ul class="comments_lists" th:if="${proto.comments != null and !proto.comments.isEmpty()}">
           <li th:each="comment : ${proto.comments}" th:text="${comment.content}"></li>
         </ul>
-        <p th:if="${proto.comments == null or proto.comments.isEmpty()}">コメントはありません。</p>
+        
       </div>
     </div>
   </div>
