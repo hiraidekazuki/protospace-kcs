@@ -15,7 +15,7 @@ import in.tech_camp.protospace.entity.ProtoEntity;
 public interface ProtoRepository {
 
   @Select("SELECT p.id, p.name, p.catchcopy, p.concept, p.image, p.user_id, " +
-          "u.name AS user_name " +
+          "u.id AS user_id_alias, u.name AS user_name_alias " +
           "FROM protos p " +
           "JOIN users u ON p.user_id = u.id " +
           "ORDER BY p.id DESC")
@@ -26,9 +26,9 @@ public interface ProtoRepository {
       @Result(property = "concept", column = "concept"),
       @Result(property = "image", column = "image"),
       @Result(property = "userId", column = "user_id"),
-      // ネストする user オブジェクトへのマッピング
-      @Result(property = "user.id", column = "user_id"),
-      @Result(property = "user.name", column = "user_name")
+      // ネストされた user オブジェクトへのマッピング（AS句で明示）
+      @Result(property = "user.id", column = "user_id_alias"),
+      @Result(property = "user.name", column = "user_name_alias")
   })
   List<ProtoEntity> findAll();
 
@@ -36,7 +36,4 @@ public interface ProtoRepository {
           "VALUES (#{name}, #{catchcopy}, #{concept}, #{image}, #{userId})")
   @Options(useGeneratedKeys = true, keyProperty = "id")
   void save(ProtoEntity proto);
-
-  @Select("SELECT * FROM protos")
-  List<ProtoEntity> findAll();
 }
