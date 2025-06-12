@@ -14,6 +14,7 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
+
       //.csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(authorizeRequests -> authorizeRequests
         //以下でログアウト状態でも実行できるGETリクエストを記述する
@@ -49,3 +50,18 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+
+        .authorizeHttpRequests(authz -> authz
+    .requestMatchers("/css/**", "/images/**", "/uploads/**", "/", "/users/sign_up", "/users/login").permitAll()
+    .requestMatchers(HttpMethod.POST, "/users").permitAll()
+    .requestMatchers("/protos/*/edit", "/protos/*/delete").authenticated()
+    .requestMatchers("/protos/**").permitAll()
+    .anyRequest().authenticated()
+)
+        .csrf(csrf -> csrf.disable());
+    return http.build();
+}
+
+}
+
+

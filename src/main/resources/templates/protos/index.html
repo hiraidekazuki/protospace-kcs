@@ -29,6 +29,30 @@
       </span>
     </div>
 
+    <!-- プロトタイプ一覧表示 -->
+    <div class="prototypes">
+      <div class="prototype" th:each="proto : ${protos}">
+        <a th:href="@{/protos/{id}(id=${proto.id})}">
+          <div class="prototype__card">
+            <img th:src="@{${proto.image}}" alt="画像" class="prototype__image">
+            <p th:text="${proto.name}" class="prototype__title">プロトタイプ名</p>
+            <p th:text="${proto.catchCopy}" class="prototype__catch">キャッチコピー</p>
+          </div>
+        </a>
+
+        <!-- 編集・削除ボタンの表示制御 -->
+        <div th:if="${#authorization.expression('isAuthenticated()') and #authentication?.principal?.id == proto.user?.id}">
+          <form th:action="@{/protos/{protoId}/update(protoId=${proto.id})}" method="get" style="display:inline-block;">
+            <input type="submit" value="編集する" class="prototype__btn">
+          </form>
+          <form th:action="@{/protos/{protoId}/delete(protoId=${proto.id})}" method="post" style="display:inline-block;">
+            <input type="submit" value="削除する" class="prototype__btn">
+          </form>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </main>
 
