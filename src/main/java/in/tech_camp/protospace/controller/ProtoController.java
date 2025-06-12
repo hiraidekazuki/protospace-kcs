@@ -73,7 +73,7 @@ public class ProtoController {
         proto.setCatchcopy(protoForm.getCatchcopy());
         proto.setConcept(protoForm.getConcept());
         proto.setImage(fileName != null ? "/uploads/" + fileName : null);
-        proto.setUser_name("test_user"); 
+        proto.setUserName("test_user"); 
 
         try {
             protoRepository.save(proto);
