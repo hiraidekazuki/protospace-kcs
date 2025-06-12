@@ -13,11 +13,28 @@ public class SecurityConfig {
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(authz -> authz
-            .anyRequest().permitAll()  // すべて許可
-        )
-        .csrf().disable(); // 必要ならCSRF無効も
+    .requestMatchers("/css/**", "/images/**", "/uploads/**", "/", "/users/sign_up", "/users/login").permitAll()
+    .requestMatchers(HttpMethod.POST, "/users").permitAll()
+    .requestMatchers("/protos/*/edit", "/protos/*/delete").authenticated()
+    .requestMatchers("/protos/**").permitAll()
+    .anyRequest().authenticated()
+)
+        .csrf(csrf -> csrf.disable());
     return http.build();
 }
+
+}
+
+
+//     @Bean
+// public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//     http
+//         .authorizeHttpRequests(authz -> authz
+//             .anyRequest().permitAll()  // すべて許可
+//         )
+//         .csrf().disable(); // 必要ならCSRF無効も
+//     return http.build();
+// }
 
 
     // @Bean
@@ -47,4 +64,3 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             
     //     return http.build();
     // }
-}
