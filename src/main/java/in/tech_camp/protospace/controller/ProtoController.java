@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,26 +22,38 @@ import in.tech_camp.protospace.entity.ProtoEntity;
 import in.tech_camp.protospace.entity.UserEntity;
 import in.tech_camp.protospace.form.CommentForm; 
 import in.tech_camp.protospace.form.ProtoForm;
+import in.tech_camp.protospace.repository.CommentRepository;
 import in.tech_camp.protospace.repository.ProtoRepository;
 import jakarta.validation.Valid;
 
 @Controller
 public class ProtoController {
 
+    private final CommentRepository commentRepository;
+
     private final ImageUrl imageUrl;
     private final ProtoRepository protoRepository;
 
-    public ProtoController(ImageUrl imageUrl, ProtoRepository protoRepository) {
+    public ProtoController(ImageUrl imageUrl, ProtoRepository protoRepository, CommentRepository commentRepository) {
         this.imageUrl = imageUrl;
         this.protoRepository = protoRepository;
+        this.commentRepository = commentRepository;
     }
 
     // トップ・新規投稿画面共通表示
-    @GetMapping({"/", "/new"})
+    @GetMapping({"protos/new"})
     public String showNewForm(Model model) {
         model.addAttribute("protoForm", new ProtoForm());
         return "protos/new";
     }
+
+    // プロトタイプ一覧ページ表示
+    @GetMapping("/protos")
+    public String showProtoList(Model model) {
+        model.addAttribute("protos", protoRepository.findAll());
+        return "protos/index"; // templates/protos/index.html を表示する
+    }
+
 
     // 投稿作成処理
     @PostMapping("/protos")
@@ -108,6 +121,10 @@ public class ProtoController {
             dummyUser.setId(0);             // 仮ID
             dummyUser.setName("仮ユーザー");  // 仮ユーザー名
             proto.setUser(dummyUser);
+        }
+
+        if (proto.getComments() == null){
+            proto.setComments(new ArrayList<>());
         }
 
         model.addAttribute("proto", proto);

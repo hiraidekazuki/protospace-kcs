@@ -29,6 +29,19 @@
       </span>
     </div>
 
+    <!-- プロトタイプ一覧表示 -->
+    <div class="prototypes">
+      <div class="prototype" th:each="proto : ${protos}">
+        <a th:href="@{/protos/{id}(id=${proto.id})}">
+          <div class="prototype__card">
+            <img th:src="@{${proto.image}}" alt="画像" class="prototype__image">
+            <p th:text="${proto.name}" class="prototype__title">プロトタイプ名</p>
+            <p th:text="${proto.catchCopy}" class="prototype__catch">キャッチコピー</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
   </div>
 </main>
 

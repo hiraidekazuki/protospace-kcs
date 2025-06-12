@@ -16,6 +16,8 @@
 <main class="main">
   <div class="inner">
     <div class="prototype__wrapper">
+      <h1 class="prototype__title" th:text="${proto.name}">プロトタイプ名</h1>
+
       <p class="prototype__hedding" th:text="${proto.catchCopy}">キャッチコピー</p>
       
       <!-- ユーザー名リンクのnullチェック追加 -->
@@ -35,7 +37,7 @@
       </div>
 
       <div class="prototype__image">
-        <img th:src="@{${proto.image}}" alt="ユーザー画像">
+        <img th:src="@{${proto.image}}" alt="ユーザーが投稿した画像">
       </div>
 
       <div class="prototype__body">
@@ -61,15 +63,15 @@
           </div>
         </form>
 
-        <!-- コメントリスト表示の条件制御
-        <ul class="comments_lists" th:if="${#lists.isNotEmpty(proto.comments)}">
+        <!-- コメントリスト表示の条件制御 -->
+        <ul class="comments_lists" th:if="${proto.comments != null and !proto.comments.isEmpty()}">
           <li th:each="comment : ${proto.comments}" th:text="${comment.content}"></li>
         </ul>
-        <p th:if="${#lists.isEmpty(proto.comments)}">まだコメントはありません。</p>
+        <p th:if="${proto.comments == null or proto.comments.isEmpty()}">コメントはありません。</p>
       </div>
     </div>
   </div>
-</main> -->
+</main>
 
 <!-- 共通フッター -->
 <div th:insert="~{footer :: footer}"></div>
