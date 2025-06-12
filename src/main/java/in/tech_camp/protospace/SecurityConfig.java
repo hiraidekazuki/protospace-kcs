@@ -14,9 +14,9 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
     http
         .authorizeHttpRequests(authz -> authz
     .requestMatchers("/css/**", "/images/**", "/uploads/**", "/", "/users/sign_up", "/users/login").permitAll()
-    .requestMatchers(HttpMethod.POST, "/user").permitAll()
-    .requestMatchers("/protos/**").permitAll()
+    .requestMatchers(HttpMethod.POST, "/users").permitAll()
     .requestMatchers("/protos/*/edit", "/protos/*/delete").authenticated()
+    .requestMatchers("/protos/**").permitAll()
     .anyRequest().authenticated()
 )
         .csrf(csrf -> csrf.disable());
