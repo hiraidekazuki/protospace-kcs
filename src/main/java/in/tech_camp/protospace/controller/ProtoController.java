@@ -40,7 +40,7 @@ public class ProtoController {
         this.commentRepository = commentRepository;
     }
 
-    // トップ・新規投稿画面共通表示
+    // 新規投稿画面共通表示
     @GetMapping({"protos/new"})
     public String showNewForm(Model model) {
         model.addAttribute("protoForm", new ProtoForm());
@@ -88,14 +88,14 @@ public class ProtoController {
         // フォームから受け取った値でProtoEntityを構築
         ProtoEntity proto = new ProtoEntity();
         proto.setName(protoForm.getName());
-        proto.setCatchCopy(protoForm.getCatchcopy());
+        proto.setCatchCopy(protoForm.getCatchCopy());
         proto.setConcept(protoForm.getConcept());
         proto.setImage(fileName != null ? "/uploads/" + fileName : null);
         proto.setUserName("test_user"); // ログイン未実装の仮置き
 
         try {
             protoRepository.save(proto); // IDがセットされる
-            return "redirect:/protos/" + proto.getId(); // 保存後に詳細ページへ遷移
+            return "redirect:/protos"; // 保存後に詳細ページへ遷移
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "保存に失敗しました。");
