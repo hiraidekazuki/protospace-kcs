@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProtoSpace</title>
+  
+  <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+  <script th:src="@{/packs/js/application.js}"></script>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ヘッダー共通化 -->
+<div th:insert="~{header :: header}"></div>
+
+<main class="main">
+  <div class="inner">
+
+    <!-- あいさつ表示 -->
+    <div class="greeting">
+      こんにちは、
+      <span th:if="${user != null}">
+        <a class="greeting__link" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.name} + 'さん'">ユーザー名</a>
+      </span>
+      <span th:unless="${user != null}">
+        ゲストさん
+      </span>
+    </div>
+
+  </div>
+</main>
+
+<!-- フッター共通化 -->
+<div th:insert="~{footer :: footer}"></div>
+
+</body>
+</html>
