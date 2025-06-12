@@ -1,4 +1,4 @@
-package in.tech_camp.protospace_kcs.controller;
+package in.tech_camp.protospace.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import in.tech_camp.protospace_kcs.custom_user.CustomUserDetail;
-import in.tech_camp.protospace_kcs.entity.UserEntity;
-import in.tech_camp.protospace_kcs.form.LoginForm;
-import in.tech_camp.protospace_kcs.form.UserForm;
-import in.tech_camp.protospace_kcs.repository.UserRepository;
+import in.tech_camp.protospace.custom_user.CustomUserDetail;
+import in.tech_camp.protospace.entity.UserEntity;
+import in.tech_camp.protospace.form.LoginForm;
+import in.tech_camp.protospace.form.UserForm;
+import in.tech_camp.protospace.repository.UserRepository;
 import jakarta.validation.Valid;
 
 @Controller

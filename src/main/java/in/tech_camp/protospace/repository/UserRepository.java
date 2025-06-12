@@ -1,4 +1,4 @@
-package in.tech_camp.protospace_kcs.repository;
+package in.tech_camp.protospace.repository;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
-import in.tech_camp.protospace_kcs.entity.UserEntity;
+import in.tech_camp.protospace.entity.UserEntity;
 
 @Mapper
 public interface UserRepository {

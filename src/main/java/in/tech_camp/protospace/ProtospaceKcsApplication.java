@@ -1,4 +1,4 @@
-package in.tech_camp.protospace_kcs;
+package in.tech_camp.protospace;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

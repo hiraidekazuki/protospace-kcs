@@ -1,4 +1,4 @@
-package in.tech_camp.protospace_kcs.entity;
+package in.tech_camp.protospace.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

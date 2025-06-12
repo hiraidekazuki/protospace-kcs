@@ -1,4 +1,4 @@
-package in.tech_camp.protospace_kcs.form;
+package in.tech_camp.protospace.form;
 
 import lombok.Data;
 

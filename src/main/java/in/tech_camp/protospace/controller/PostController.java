@@ -1,4 +1,4 @@
-package in.tech_camp.protospace_kcs.controller;
+package in.tech_camp.protospace.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

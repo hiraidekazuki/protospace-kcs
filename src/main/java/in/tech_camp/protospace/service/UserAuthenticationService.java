@@ -1,13 +1,13 @@
-package in.tech_camp.protospace_kcs.service;
+package in.tech_camp.protospace.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import in.tech_camp.protospace_kcs.custom_user.CustomUserDetail;
-import in.tech_camp.protospace_kcs.entity.UserEntity;
-import in.tech_camp.protospace_kcs.repository.UserRepository;
+import in.tech_camp.protospace.custom_user.CustomUserDetail;
+import in.tech_camp.protospace.entity.UserEntity;
+import in.tech_camp.protospace.repository.UserRepository;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -25,5 +25,5 @@ public class UserAuthenticationService implements UserDetailsService {
 
       return new CustomUserDetail(userEntity);
   }
-  
+
 }

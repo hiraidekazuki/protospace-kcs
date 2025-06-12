@@ -1,4 +1,4 @@
-package in.tech_camp.protospace_kcs.custom_user;
+package in.tech_camp.protospace.custom_user;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import in.tech_camp.protospace_kcs.entity.UserEntity;
+import in.tech_camp.protospace.entity.UserEntity;
 import lombok.Data;
 
 @Data
@@ -59,5 +59,5 @@ public class CustomUserDetail implements UserDetails {
   public boolean isEnabled() {
       return true;
   }
-  
+
 }
