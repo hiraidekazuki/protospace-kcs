@@ -1,5 +1,7 @@
 package in.tech_camp.protospace.form;
 
+import org.springframework.validation.BindingResult;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -31,7 +33,9 @@ public class UserForm {
     @NotBlank(message = "役職は必須です")
     private String post;
 
-    public UserForm() {
+    public void validatePasswordConfirmation(BindingResult result) {
+      if (!password.equals(passwordConfirmation)) {
+          result.rejectValue("passwordConfirmation", null, "Password confirmation doesn't match Password");
+      }
     }
-
 }
