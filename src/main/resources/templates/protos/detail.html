@@ -28,7 +28,8 @@
       <span th:if="${proto.user == null}">by 未登録ユーザー</span>
 
       <!-- 編集・削除ボタンをログインしているユーザーだけに表示 -->
-      <div class="prototype__manage" th:if="${#authorization.expression('isAuthenticated()')}">
+      <div class="prototype__manage" 
+           th:if="${#authorization.expression('isAuthenticated()')and proto.user.id == principal.id}">
        <form th:action="@{/protos/{protoId}/update(protoId=${proto.id})}" method="post">
          <input type="submit" class="prototype__btn" value="編集する">
        </form>
