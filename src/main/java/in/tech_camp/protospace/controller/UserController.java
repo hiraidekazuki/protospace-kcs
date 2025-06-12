@@ -91,8 +91,7 @@ public String mypage(Model model, @AuthenticationPrincipal CustomUserDetail user
     model.addAttribute("email", userDetail.getUsername()); // メールアドレス
     model.addAttribute("name", userDetail.getName());      // 表示名（UserEntityのname）
     return "users/mypage";
-}
+   }
    
-
 }
   

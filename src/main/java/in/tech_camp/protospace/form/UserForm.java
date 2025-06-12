@@ -34,5 +34,4 @@ public class UserForm {
     public UserForm() {
     }
 
-    // 不要な getter は削除！Lombok に任せましょう。
 }
