@@ -32,8 +32,13 @@ public class ProtoController {
         this.protoRepository = protoRepository;
     }
 
+<<<<<<< Updated upstream
     // // トップ・新規投稿画面共通表示
     @GetMapping({"/", "/new"})
+=======
+    // トップ・新規投稿画面共通表示
+    @GetMapping({"/protos/new"})
+>>>>>>> Stashed changes
     public String showNewForm(Model model) {
         model.addAttribute("protoForm", new ProtoForm());
         return "protos/new";
