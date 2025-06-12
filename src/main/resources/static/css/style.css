@@ -344,6 +344,8 @@ a {
         width: 100%
     }
 }
+
+/*以下ユーザー管理機能CSS*/
 .head{
   display: none;
 }
@@ -394,7 +396,8 @@ html, body {
 
 .welcome {
      flex: 1;
-     padding: 20px 40px 40px 40px;
+     padding: 20px 40px 380px 40px;
+     margin: 0px;
 }
 
 .inner{
@@ -548,7 +551,7 @@ input[type="hidden" i] {
     transition: 0.2s ease;
 }
 
-.footer{
+.under{
   bottom: 0;
   left: 0;
   width: 100%;
@@ -557,15 +560,6 @@ input[type="hidden" i] {
   text-align: center;
 }
 
-.under{
-  position: fixed;;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #999;
-  padding: 10px 0;
-  text-align: center;
-}
 
 p {
     display: block;
@@ -575,3 +569,5 @@ p {
     margin-inline-end: 0px;
     unicode-bidi : isolate;
 }
+
+/*以上ユーザー管理機能の装飾*/
