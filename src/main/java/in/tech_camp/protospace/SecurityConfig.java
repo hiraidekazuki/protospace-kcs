@@ -13,12 +13,12 @@ public class SecurityConfig {
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(authz -> authz
-            .requestMatchers("/css/**", "/images/**", "/", "/users/sign_up", "/users/login").permitAll()
-            .requestMatchers(HttpMethod.POST, "/user").permitAll()
-            .requestMatchers("/protos/**").permitAll()  // 詳細ページ閲覧は誰でもOKに
-            .requestMatchers("/protos/*/edit", "/protos/*/delete").authenticated() // 編集・削除はログイン必須
-            .anyRequest().authenticated() // 他はログイン必須
-        )
+    .requestMatchers("/css/**", "/images/**", "/uploads/**", "/", "/users/sign_up", "/users/login").permitAll()
+    .requestMatchers(HttpMethod.POST, "/user").permitAll()
+    .requestMatchers("/protos/**").permitAll()
+    .requestMatchers("/protos/*/edit", "/protos/*/delete").authenticated()
+    .anyRequest().authenticated()
+)
         .csrf(csrf -> csrf.disable());
     return http.build();
 }
