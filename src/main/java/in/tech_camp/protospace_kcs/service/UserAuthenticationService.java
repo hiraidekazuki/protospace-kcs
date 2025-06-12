@@ -25,4 +25,5 @@ public class UserAuthenticationService implements UserDetailsService {
 
       return new CustomUserDetail(userEntity);
   }
+  
 }
