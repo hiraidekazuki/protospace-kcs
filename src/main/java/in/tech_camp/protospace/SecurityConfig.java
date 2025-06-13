@@ -15,13 +15,21 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
 
+      // CSRFを無効化（必要に応じてコメントアウトしてください）
+      //.csrf(csrf -> csrf.disable())
+
       //.csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(authorizeRequests -> authorizeRequests
         //以下でログアウト状態でも実行できるGETリクエストを記述する
-        .requestMatchers("/css/**", "/users/sign_up", "/users/login","/images/**").permitAll()
+        .requestMatchers("/css/**", "/images/**", "/uploads/**", "/", "/users/sign_up", "/users/login").permitAll()
         //以下でログアウト状態でも実行できるPOSTリクエストを記述する
-        .requestMatchers(HttpMethod.POST, "/user").permitAll()
+        .requestMatchers(HttpMethod.POST, "/users").permitAll()
         //上記以外のリクエストは認証されたユーザーのみ許可される(要ログイン)
+        // 認証が必要な編集・削除系の操作
+        .requestMatchers("/protos/*/edit", "/protos/*/delete").authenticated()
+        // その他の /protos 配下のリクエストは全て許可
+        .requestMatchers("/protos/**").permitAll()
+
         .anyRequest().authenticated())
 
       .formLogin(login -> login
@@ -30,7 +38,7 @@ public class SecurityConfig {
         //ログインページのパスを設定
         .loginPage("/users/login")
         //ログイン成功後のリダイレクト先
-        .defaultSuccessUrl("/users/mypage", true)//仮のマイページ
+        .defaultSuccessUrl("/protos", true)
         //ログイン失敗後のリダイレクト先
         .failureUrl("/login?error")
         .usernameParameter("email")
@@ -50,18 +58,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-
-        .authorizeHttpRequests(authz -> authz
-    .requestMatchers("/css/**", "/images/**", "/uploads/**", "/", "/users/sign_up", "/users/login").permitAll()
-    .requestMatchers(HttpMethod.POST, "/users").permitAll()
-    .requestMatchers("/protos/*/edit", "/protos/*/delete").authenticated()
-    .requestMatchers("/protos/**").permitAll()
-    .anyRequest().authenticated()
-)
-        .csrf(csrf -> csrf.disable());
-    return http.build();
-}
-
-}
-
-

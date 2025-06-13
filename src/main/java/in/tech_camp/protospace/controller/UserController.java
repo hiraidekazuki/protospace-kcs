@@ -1,6 +1,6 @@
 package in.tech_camp.protospace.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+//import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import in.tech_camp.protospace.custom_user.CustomUserDetail;
 import in.tech_camp.protospace.entity.UserEntity;
 import in.tech_camp.protospace.form.LoginForm;
 import in.tech_camp.protospace.form.UserForm;
@@ -36,7 +35,7 @@ public class UserController {
 
 
      // 登録処理
-    @PostMapping("/user")
+    @PostMapping("/users")
     public String create(@ModelAttribute @Valid UserForm form, 
                          BindingResult result,
                          Model model) {
@@ -72,26 +71,16 @@ public class UserController {
         // データベースに保存
         userRepository.insert(user);
 
-        return "redirect:/users/mypage"; // 一覧表示などにリダイレクト 
+        return "redirect:/protos"; // 一覧表示などにリダイレクト 
     }
-
-    //ログイン画面の表示
-  @GetMapping("/users/login")
-   public String loginForm(@RequestParam(value = "error", required = false) String error, Model model) {
-    model.addAttribute("loginForm", new LoginForm());
-    if (error != null) {
+       //ログイン画面の表示
+       @GetMapping("/users/login")
+       public String loginForm(@RequestParam(value = "error", required = false) String error, Model model) {
+       model.addAttribute("loginForm", new LoginForm());
+       if (error != null) {
         model.addAttribute("loginError", "メールアドレスかパスワードが間違っています。");
-    }
-    return "users/login";
-}
-
-//トップページ
-@GetMapping("/users/mypage")
-public String mypage(Model model, @AuthenticationPrincipal CustomUserDetail userDetail) {
-    model.addAttribute("email", userDetail.getUsername()); // メールアドレス
-    model.addAttribute("name", userDetail.getName());      // 表示名（UserEntityのname）
-    return "users/mypage";
+       }
+       return "users/login";
    }
-   
+
 }
-  
