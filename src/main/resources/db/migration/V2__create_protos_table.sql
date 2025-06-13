@@ -1,10 +1,12 @@
 CREATE TABLE protos (
-    id SERIAL NOT NULL,
-    name VARCHAR(256) NOT NULL,
-    catchcopy VARCHAR(256) NOT NULL,
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    catchcopy TEXT NOT NULL,
     concept TEXT NOT NULL,
-    image VARCHAR(256) NOT NULL,
-    user_name VARCHAR(128) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+    image TEXT,
+    user_id INTEGER NOT NULL,
+    CONSTRAINT fk_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
 );

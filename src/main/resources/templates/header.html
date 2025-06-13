@@ -1,4 +1,9 @@
-<header class="header" th:fragment="header" xmlns:th="http://www.thymeleaf.org">
+<header
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  th:fragment="header"
+  class="header">
+  
   <div class="inner">
     <div class="nav">
       <div class="nav__left">
@@ -7,19 +12,20 @@
         </a>
       </div>
 
-      <!-- ログイン済みユーザー向け -->
-      <div class="nav__right" th:if="${#authorization.expression('isAuthenticated()')}">
-        <form th:action="@{/logout}" method="post" style="display:inline-block">
-          <input type="submit" class="nav__logout" value="ログアウト" />
-        </form>
-        <a class="nav__btn" th:href="@{/prototypes/new}">New Proto</a>
+      <div class="nav__right">
+        <!-- ログイン済みのとき -->
+        <div sec:authorize="isAuthenticated()">
+          <a class="nav__logout" href="/logout">ログアウト</a>
+          <a class="nav__btn" href="/prototypes/new">New Proto</a>
+        </div>
+
+        <!-- 未ログインのとき -->
+        <div sec:authorize="isAnonymous()">
+          <a class="nav__btn" href="/login">ログイン</a>
+          <a class="nav__btn" href="/signup">新規登録</a>
+        </div>
       </div>
 
-      <!-- 未ログインユーザー向け -->
-      <div class="nav__right" th:if="${#authorization.expression('!isAuthenticated()')}">
-        <a class="nav__btn" th:href="@{/users/login}">ログイン</a>
-        <a class="nav__btn" th:href="@{/users/sign_up}">新規登録</a>
-      </div>
     </div>
   </div>
 </header>

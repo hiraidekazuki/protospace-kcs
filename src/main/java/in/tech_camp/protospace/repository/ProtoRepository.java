@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
 import in.tech_camp.protospace.entity.ProtoEntity;
@@ -12,15 +14,26 @@ import in.tech_camp.protospace.entity.ProtoEntity;
 @Mapper
 public interface ProtoRepository {
 
-  @Insert("INSERT INTO protos (name, catchcopy, concept, image, user_name) VALUES (#{name}, #{catchCopy}, #{concept}, #{image}, #{userName})")
-  @Options(useGeneratedKeys = true, keyProperty = "id")
-  void save(ProtoEntity proto);
-
-  @Select("SELECT * FROM protos")
+  @Select("SELECT p.id, p.name, p.catchcopy, p.concept, p.image, p.user_id, " +
+          "u.id AS user_id_alias, u.name AS user_name_alias " +
+          "FROM protos p " +
+          "JOIN users u ON p.user_id = u.id " +
+          "ORDER BY p.id DESC")
+  @Results({
+      @Result(property = "id", column = "id"),
+      @Result(property = "name", column = "name"),
+      @Result(property = "catchcopy", column = "catchcopy"),
+      @Result(property = "concept", column = "concept"),
+      @Result(property = "image", column = "image"),
+      @Result(property = "userId", column = "user_id"),
+      // ネストされた user オブジェクトへのマッピング（AS句で明示）
+      @Result(property = "user.id", column = "user_id_alias"),
+      @Result(property = "user.name", column = "user_name_alias")
+  })
   List<ProtoEntity> findAll();
 
-  // ここをstaticではなく、普通のメソッドで宣言しSQLも書く
-  @Select("SELECT * FROM protos WHERE id = #{id}")
-  ProtoEntity findById(Integer id);
-
+  @Insert("INSERT INTO protos (name, catchcopy, concept, image, user_id) " +
+          "VALUES (#{name}, #{catchcopy}, #{concept}, #{image}, #{userId})")
+  @Options(useGeneratedKeys = true, keyProperty = "id")
+  void save(ProtoEntity proto);
 }
