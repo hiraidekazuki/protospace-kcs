@@ -28,7 +28,7 @@ public class CommentController {
 
   private final ProtoRepository protoRepository;
 
-  @PostMapping("/protos/{protoId}/comment")
+  @PostMapping("/protos/{protoId}/comments")
   public String addComment(@PathVariable("protoId") Integer protoId,
                            @ModelAttribute("commentForm") @Validated CommentForm commentForm,
                            BindingResult result,
