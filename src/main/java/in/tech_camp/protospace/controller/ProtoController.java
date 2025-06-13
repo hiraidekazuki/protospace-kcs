@@ -91,7 +91,7 @@ public class ProtoController {
         proto.setCatchCopy(protoForm.getCatchCopy());
         proto.setConcept(protoForm.getConcept());
         proto.setImage(fileName != null ? "/uploads/" + fileName : null);
-        proto.setUserName("test_user"); // ログイン未実装の仮置き
+        proto.setUserId("test_user"); // ログイン未実装の仮置き
 
         System.out.println("=== デバッグログ ===");
         System.out.println("フォームのname: " + protoForm.getName());

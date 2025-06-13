@@ -4,7 +4,7 @@ CREATE TABLE protos (
     catchcopy VARCHAR(256) NOT NULL,
     concept TEXT NOT NULL,
     image VARCHAR(256) NOT NULL,
-    user_name VARCHAR(128) NOT NULL,
+    user_id VARCHAR(128) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
