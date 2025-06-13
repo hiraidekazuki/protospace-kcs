@@ -16,12 +16,24 @@ import in.tech_camp.protospace.entity.ProtoEntity;
 @Mapper
 public interface ProtoRepository {
 
-  @Insert("INSERT INTO protos (name, catchcopy, concept, image, user_id) VALUES (#{name}, #{catchCopy}, #{concept}, #{image}, #{userId})")
-  @Options(useGeneratedKeys = true, keyProperty = "id")
-  void save(ProtoEntity proto);
-
-  @Select("SELECT * FROM protos")
+  @Select("SELECT p.id, p.name, p.catchcopy, p.concept, p.image, p.user_id, " +
+          "u.id AS user_id_alias, u.name AS user_name_alias " +
+          "FROM protos p " +
+          "JOIN users u ON p.user_id = u.id " +
+          "ORDER BY p.id DESC")
+  @Results({
+      @Result(property = "id", column = "id"),
+      @Result(property = "name", column = "name"),
+      @Result(property = "catchcopy", column = "catchcopy"),
+      @Result(property = "concept", column = "concept"),
+      @Result(property = "image", column = "image"),
+      @Result(property = "userId", column = "user_id"),
+      // ネストされた user オブジェクトへのマッピング（AS句で明示）
+      @Result(property = "user.id", column = "user_id_alias"),
+      @Result(property = "user.name", column = "user_name_alias")
+  })
   List<ProtoEntity> findAll();
+
 
   @Select("SELECT * FROM protos WHERE id = #{id}")
   @Results(value = {
@@ -33,5 +45,11 @@ public interface ProtoRepository {
 })
 ProtoEntity findById(Integer id);
 
+
+
+  @Insert("INSERT INTO protos (name, catchcopy, concept, image, user_id) " +
+          "VALUES (#{name}, #{catchcopy}, #{concept}, #{image}, #{userId})")
+  @Options(useGeneratedKeys = true, keyProperty = "id")
+  void save(ProtoEntity proto);
 
 }
