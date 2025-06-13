@@ -24,7 +24,7 @@ public class ProtoController {
     }
 
      @GetMapping("/")
-    public String shoIndex(Model model) {
+    public String showIndex(Model model) {
         List<ProtoEntity> prototypes = protoRepository.findAll();
         model.addAttribute("prototypes", prototypes);
 

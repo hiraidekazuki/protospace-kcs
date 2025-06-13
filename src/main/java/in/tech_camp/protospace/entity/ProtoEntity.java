@@ -1,20 +1,18 @@
 package in.tech_camp.protospace.entity;
 
-import lombok.Data;
-
-@Data
 public class ProtoEntity {
 
     private Integer id;
     private String name;
-    private String catchcopy;
+    private String catchcopy;  // ← 全て小文字に修正
     private String concept;
     private String image;
-    private Integer userId;  // Integerで統一
+    private Integer userId;
 
-    private UserEntity user;  // ユーザー情報の保持
+    private UserEntity user;
 
-    // --- Getter / Setter ---
+    public ProtoEntity() {
+    }
 
     public Integer getId() {
         return id;
@@ -32,6 +30,7 @@ public class ProtoEntity {
         this.name = name;
     }
 
+    // catchcopy のgetter/setter
     public String getCatchcopy() {
         return catchcopy;
     }
