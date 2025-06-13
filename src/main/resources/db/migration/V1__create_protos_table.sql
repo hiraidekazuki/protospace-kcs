@@ -1,10 +1,9 @@
-CREATE TABLE protos (
-    id SERIAL NOT NULL,
-    name VARCHAR(256) NOT NULL,
-    catchcopy VARCHAR(256) NOT NULL,
-    concept TEXT NOT NULL,
-    image VARCHAR(256) NOT NULL,
-    user_id VARCHAR(128) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id)
+CREATE TABLE users (
+    id BIGSERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    profile TEXT,
+    group_name VARCHAR(255),
+    post TEXT
 );
