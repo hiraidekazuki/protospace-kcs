@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import in.tech_camp.protospace.component.ImageUrl;
 import in.tech_camp.protospace.entity.ProtoEntity;
-
+import in.tech_camp.protospace.repository.CommentRepository;
 import in.tech_camp.protospace.repository.ProtoRepository;
 
 @Controller
@@ -21,7 +21,7 @@ public class ProtoController {
     private final ProtoRepository protoRepository;
 
     @Autowired
-    public ProtoController(ImageUrl imageUrl, ProtoRepository protoRepository) {
+    public ProtoController(ImageUrl imageUrl, ProtoRepository protoRepository, CommentRepository commentRepository) {
         this.imageUrl = imageUrl;
         this.protoRepository = protoRepository;
         this.commentRepository = commentRepository;
