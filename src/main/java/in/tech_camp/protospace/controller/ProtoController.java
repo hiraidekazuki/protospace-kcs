@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import in.tech_camp.protospace.component.ImageUrl;
+import in.tech_camp.protospace.custom_user.CustomUserDetail;
 import in.tech_camp.protospace.entity.ProtoEntity;
 import in.tech_camp.protospace.entity.UserEntity;
 import in.tech_camp.protospace.form.CommentForm; 
@@ -30,7 +33,6 @@ import jakarta.validation.Valid;
 public class ProtoController {
 
     private final CommentRepository commentRepository;
-
     private final ImageUrl imageUrl;
     private final ProtoRepository protoRepository;
 
@@ -53,7 +55,6 @@ public class ProtoController {
         model.addAttribute("protos", protoRepository.findAll());
         return "protos/index"; // templates/protos/index.html を表示する
     }
-
 
     // 投稿作成処理
     @PostMapping("/protos")
@@ -91,16 +92,24 @@ public class ProtoController {
         proto.setCatchCopy(protoForm.getCatchCopy());
         proto.setConcept(protoForm.getConcept());
         proto.setImage(fileName != null ? "/uploads/" + fileName : null);
-        proto.setUserId("test_user"); // ログイン未実装の仮置き
+
+        // ログインユーザーIDをセット
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetail) {
+            CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+            proto.setUserId(userDetails.getId());
+        } else {
+            proto.setUserId(0); // ログインしていない場合の仮置き
+        }
 
         System.out.println("=== デバッグログ ===");
         System.out.println("フォームのname: " + protoForm.getName());
         System.out.println("エンティティのname: " + proto.getName());
-
+        System.out.println("セットされたユーザーID: " + proto.getUserId());
 
         try {
             protoRepository.save(proto); // IDがセットされる
-            return "redirect:/protos"; // 保存後に詳細ページへ遷移
+            return "redirect:/protos"; // 保存後に一覧ページへ遷移
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "保存に失敗しました。");
@@ -112,8 +121,10 @@ public class ProtoController {
     @GetMapping("/protos/{protoId}")
     public String showProtoDetail(@PathVariable("protoId") Integer protoId, Model model) {
         ProtoEntity proto = protoRepository.findById(protoId);
+        CommentForm commentForm = new CommentForm();
         if (proto == null) {
             model.addAttribute("error", "指定された投稿が見つかりません。");
+            model.addAttribute("commentForm", commentForm);
             return "error"; // 適切なエラーページに切り替えてください
         }
 
@@ -137,21 +148,19 @@ public class ProtoController {
     }
 }
 
+// // テスト用詳細表示（手動作成のダミーデータ）
+// @GetMapping("/test-detail")
+// public String testDetail(Model model) {
+//     ProtoEntity proto = new ProtoEntity();
+//     proto.setId(1);
+//     proto.setName("テスト");
+//     proto.setCatchCopy("これはキャッチコピーです！");
+//     proto.setConcept("これはコンセプトです。");
+//     proto.setImage("/uploads/test_image.png");
+//     proto.setUserName("test_user");
 
+//     proto.setUser(new UserEntity()); // null回避用の空ユーザー
 
-    // // テスト用詳細表示（手動作成のダミーデータ）
-    // @GetMapping("/test-detail")
-    // public String testDetail(Model model) {
-    //     ProtoEntity proto = new ProtoEntity();
-    //     proto.setId(1);
-    //     proto.setName("テスト");
-    //     proto.setCatchCopy("これはキャッチコピーです！");
-    //     proto.setConcept("これはコンセプトです。");
-    //     proto.setImage("/uploads/test_image.png");
-    //     proto.setUserName("test_user");
-
-    //     proto.setUser(new UserEntity()); // null回避用の空ユーザー
-
-    //     model.addAttribute("proto", proto);
-    //     return "protos/detail";
-    // }
+//     model.addAttribute("proto", proto);
+//     return "protos/detail";
+// }

@@ -1,7 +1,5 @@
 package in.tech_camp.protospace.form;
 
-// 仮置き
-
 import jakarta.validation.constraints.NotBlank;
 
 public class CommentForm {

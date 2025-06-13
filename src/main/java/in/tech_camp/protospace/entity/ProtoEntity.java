@@ -12,7 +12,7 @@ public class ProtoEntity {
     private String catchCopy;
     private String concept;
     private String image;
-    private String userId;
+    private Integer userId;
     private UserEntity user;
     private List<CommentEntity> comments;
 
