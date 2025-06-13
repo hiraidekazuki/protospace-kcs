@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import in.tech_camp.protospace.component.ImageUrl;
 import in.tech_camp.protospace.entity.ProtoEntity;
+
 import in.tech_camp.protospace.repository.ProtoRepository;
 
 @Controller
 public class ProtoController {
+
+    private final CommentRepository commentRepository;
 
     private final ImageUrl imageUrl;
     private final ProtoRepository protoRepository;
@@ -21,6 +24,7 @@ public class ProtoController {
     public ProtoController(ImageUrl imageUrl, ProtoRepository protoRepository) {
         this.imageUrl = imageUrl;
         this.protoRepository = protoRepository;
+        this.commentRepository = commentRepository;
     }
 
      @GetMapping("/")

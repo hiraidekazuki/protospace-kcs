@@ -12,7 +12,7 @@ public class ProtoForm {
     private String name;
 
     @NotBlank(message = "キャッチコピーは必須です")
-    private String catchcopy;
+    private String catchCopy;
 
     @NotBlank(message = "コンセプトは必須です")
     private String concept;
