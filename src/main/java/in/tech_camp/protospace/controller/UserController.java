@@ -106,7 +106,7 @@ public class UserController {
     // /users/{id} にアクセスしたとき指定ユーザー情報とそのプロトタイプ一覧を表示
     @GetMapping("/{id}")
     public String showUserPage(@PathVariable Long id, Model model) {
-        UserEntity userEntity = userRepository.findByEmail(id);
+        UserEntity userEntity = userRepository.findById(id);
         if (userEntity == null) {
             return "redirect:/";
         }

@@ -12,6 +12,7 @@ import in.tech_camp.protospace.entity.UserEntity;
 @Mapper
 public interface UserRepository {
 
+
     @Select("SELECT * FROM users WHERE id = #{id}")
     UserEntity findById(Long id);
 

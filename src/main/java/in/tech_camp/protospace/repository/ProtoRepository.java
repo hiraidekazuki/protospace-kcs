@@ -14,6 +14,7 @@ import in.tech_camp.protospace.entity.ProtoEntity;
 @Mapper
 public interface ProtoRepository {
 
+  // 全プロトタイプを取得
   @Select("SELECT p.id, p.name, p.catchcopy, p.concept, p.image, p.user_id, " +
           "u.id AS user_id_alias, u.name AS user_name_alias " +
           "FROM protos p " +
@@ -26,14 +27,33 @@ public interface ProtoRepository {
       @Result(property = "concept", column = "concept"),
       @Result(property = "image", column = "image"),
       @Result(property = "userId", column = "user_id"),
-      // ネストされた user オブジェクトへのマッピング（AS句で明示）
       @Result(property = "user.id", column = "user_id_alias"),
       @Result(property = "user.name", column = "user_name_alias")
   })
   List<ProtoEntity> findAll();
 
+  // プロトタイプ保存
   @Insert("INSERT INTO protos (name, catchcopy, concept, image, user_id) " +
           "VALUES (#{name}, #{catchcopy}, #{concept}, #{image}, #{userId})")
   @Options(useGeneratedKeys = true, keyProperty = "id")
   void save(ProtoEntity proto);
+
+  // 指定ユーザーIDに紐づくプロトタイプ一覧を取得（追加）
+  @Select("SELECT p.id, p.name, p.catchcopy, p.concept, p.image, p.user_id, " +
+          "u.id AS user_id_alias, u.name AS user_name_alias " +
+          "FROM protos p " +
+          "JOIN users u ON p.user_id = u.id " +
+          "WHERE p.user_id = #{userId} " +
+          "ORDER BY p.id DESC")
+  @Results({
+      @Result(property = "id", column = "id"),
+      @Result(property = "name", column = "name"),
+      @Result(property = "catchcopy", column = "catchcopy"),
+      @Result(property = "concept", column = "concept"),
+      @Result(property = "image", column = "image"),
+      @Result(property = "userId", column = "user_id"),
+      @Result(property = "user.id", column = "user_id_alias"),
+      @Result(property = "user.name", column = "user_name_alias")
+  })
+  List<ProtoEntity> findByUserId(Long userId);
 }

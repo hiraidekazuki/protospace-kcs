@@ -1,24 +1,21 @@
 package in.tech_camp.protospace.entity;
 
 public class ProtoEntity {
-
-    private Integer id;
+    private Long id;
     private String name;
-    private String catchcopy;  // ← 全て小文字に修正
+    private String catchcopy;
     private String concept;
     private String image;
-    private Integer userId;
-
+    private Long userId;
     private UserEntity user;
 
-    public ProtoEntity() {
-    }
+    // --- Getter & Setter ---
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -30,7 +27,6 @@ public class ProtoEntity {
         this.name = name;
     }
 
-    // catchcopy のgetter/setter
     public String getCatchcopy() {
         return catchcopy;
     }
@@ -55,14 +51,15 @@ public class ProtoEntity {
         this.image = image;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
+    // 👇 追加：User フィールドの getter/setter
     public UserEntity getUser() {
         return user;
     }
