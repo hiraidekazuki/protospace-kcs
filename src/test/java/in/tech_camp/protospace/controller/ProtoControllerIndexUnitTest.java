@@ -25,7 +25,6 @@ import in.tech_camp.protospace.entity.ProtoEntity;
 import in.tech_camp.protospace.entity.UserEntity;
 import in.tech_camp.protospace.repository.ProtoRepository;
 
-
 @WebMvcTest(controllers = ProtoController.class,
             excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class ProtoControllerIndexUnitTest {
@@ -72,7 +71,7 @@ public class ProtoControllerIndexUnitTest {
         ProtoEntity proto = new ProtoEntity();
         proto.setId(1L);
         proto.setName("テストプロトタイプ");
-        proto.setCatchcopy("キャッチコピー");
+        proto.setCatchCopy("キャッチコピー");  // ← ここをsetCatchCopyに修正
         proto.setImage("test.png");
         proto.setUser(user);
 
@@ -85,7 +84,7 @@ public class ProtoControllerIndexUnitTest {
             .andExpect(model().attribute("prototypes", hasItem(
                 allOf(
                     hasProperty("name", is("テストプロトタイプ")),
-                    hasProperty("catchcopy", is("キャッチコピー")),
+                    hasProperty("catchCopy", is("キャッチコピー")),  // ← プロパティ名もcatchCopyに修正
                     hasProperty("image", is("test.png")),
                     hasProperty("user", hasProperty("name", is("投稿者太郎")))
                 )

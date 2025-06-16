@@ -16,10 +16,9 @@
 <main class="main">
   <div class="inner">
     <div class="prototype__wrapper">
-      <!-- <h1 class="prototype__title" th:text="${proto.name}">プロトタイプ名</h1> -->
 
       <p class="prototype__hedding" th:text="${proto.name}">プロトタイプ名</p>
-      
+
       <!-- ユーザー名リンクのnullチェック追加 -->
       <a class="prototype__user"
          th:if="${proto.user != null}"
@@ -27,16 +26,16 @@
          th:text="'by ' + ${proto.user.name}"></a>
       <span th:if="${proto.user == null}">by 未登録ユーザー</span>
 
-      <!-- 編集・削除ボタンをログインしているユーザーだけに表示 -->
-      <div class="prototype__manage" 
-           th:if="${#authorization.expression('isAuthenticated()')and proto.user.id == principal.id}">
-       <form th:action="@{/protos/{protoId}/update(protoId=${proto.id})}" method="post">
-         <input type="submit" class="prototype__btn" value="編集する">
-       </form>
-       <form th:action="@{/protos/{protoId}/delete(protoId=${proto.id})}" method="post">
-         <input type="submit" class="prototype__btn" value="削除する">
-       </form>
-     </div>
+      <!-- 編集・削除ボタンを「ログインしていて、かつ本人のみ」に表示 -->
+      <div class="prototype__manage"
+           th:if="${user != null and user.id == proto.user.id}">
+        <form th:action="@{/protos/{protoId}/update(protoId=${proto.id})}" method="post">
+          <input type="submit" class="prototype__btn" value="編集する">
+        </form>
+        <form th:action="@{/protos/{protoId}/delete(protoId=${proto.id})}" method="post">
+          <input type="submit" class="prototype__btn" value="削除する">
+        </form>
+      </div>
 
       <div class="prototype__image">
         <img th:src="@{${proto.image}}" alt="ユーザーが投稿した画像">
@@ -54,7 +53,6 @@
       </div>
 
       <div class="prototype__comments">
-        <!-- コメントフォーム修正 -->
         <form th:action="@{/protos/{protoId}/comments(protoId=${proto.id})}" method="post" th:object="${comment}">
           <div class="field">
             <label for="comment_content">コメント</label><br>
@@ -65,11 +63,9 @@
           </div>
         </form>
 
-        <!-- コメントリスト表示の条件制御 -->
         <ul class="comments_lists" th:if="${proto.comments != null and !proto.comments.isEmpty()}">
           <li th:each="comment : ${proto.comments}" th:text="${comment.content}"></li>
         </ul>
-        
       </div>
     </div>
   </div>

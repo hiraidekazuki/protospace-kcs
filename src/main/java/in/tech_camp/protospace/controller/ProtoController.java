@@ -1,8 +1,10 @@
 package in.tech_camp.protospace.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import in.tech_camp.protospace.custom_user.CustomUserDetails;
 import in.tech_camp.protospace.entity.ProtoEntity;
@@ -23,12 +26,14 @@ public class ProtoController {
 
     private final ProtoRepository protoRepository;
 
-    @Autowired
+    // 実行環境に合わせて絶対パスなど書き込み可能なディレクトリに変更推奨
+    @Value("${upload.image.dir:/tmp/myapp/uploads/images}")
+    private String uploadDir;
+
     public ProtoController(ProtoRepository protoRepository) {
         this.protoRepository = protoRepository;
     }
 
-    // トップページ
     @GetMapping("/")
     public String showIndex(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
         List<ProtoEntity> prototypes = protoRepository.findAll();
@@ -37,14 +42,12 @@ public class ProtoController {
         return "protos/index";
     }
 
-    // 新規投稿ページに遷移
     @GetMapping("/protos/new")
     public String newProto(Model model) {
         model.addAttribute("protoForm", new ProtoForm());
         return "protos/new";
     }
 
-    // プロトタイプ投稿の保存処理
     @PostMapping("/protos")
     public String createProto(
         @Valid @ModelAttribute("protoForm") ProtoForm protoForm,
@@ -58,22 +61,74 @@ public class ProtoController {
 
         ProtoEntity entity = new ProtoEntity();
         entity.setName(protoForm.getName());
-        entity.setCatchcopy(protoForm.getCatchCopy());
+        entity.setCatchCopy(protoForm.getCatchCopy());
         entity.setConcept(protoForm.getConcept());
         entity.setUser(userDetails.getUserEntity());
+        entity.setUserId(userDetails.getUserEntity().getId());
 
-        ProtoEntity savedEntity = protoRepository.save(entity);
+        MultipartFile imageFile = protoForm.getImage();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
 
-        // 投稿詳細ページへリダイレクト
-        return "redirect:/protos/detail/" + savedEntity.getId();
+                File uploadDirFile = new File(uploadDir);
+                if (!uploadDirFile.exists()) {
+                    boolean created = uploadDirFile.mkdirs();
+                    if (!created) {
+                        bindingResult.rejectValue("image", "upload.failed", "アップロードディレクトリの作成に失敗しました");
+                        return "protos/new";
+                    }
+                }
+
+                File destFile = new File(uploadDirFile, fileName);
+                imageFile.transferTo(destFile);
+
+                // 公開URLはWebアクセス可能なパスに合わせて調整する
+                entity.setImage("/uploads/images/" + fileName);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                bindingResult.rejectValue("image", "upload.failed", "画像のアップロードに失敗しました");
+                return "protos/new";
+            }
+        }
+
+        protoRepository.save(entity);
+
+        return "redirect:/";
     }
 
-    // 投稿詳細ページの表示処理
     @GetMapping("/protos/detail/{id}")
-    public String showDetail(@PathVariable Long id, Model model) {
-        ProtoEntity proto = protoRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Invalid proto ID: " + id));
+    public String showDetail(
+        @PathVariable Long id,
+        Model model,
+        @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        ProtoEntity proto = protoRepository.findById(id);
+        if (proto == null) {
+            throw new IllegalArgumentException("Invalid proto ID: " + id);
+        }
+
         model.addAttribute("proto", proto);
+        model.addAttribute("user", userDetails != null ? userDetails.getUserEntity() : null);
         return "protos/detail";
+    }
+
+    @PostMapping("/protos/{id}/delete")
+    public String deleteProto(
+        @PathVariable Long id,
+        @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        ProtoEntity proto = protoRepository.findById(id);
+        if (proto == null) {
+            throw new IllegalArgumentException("Invalid proto ID: " + id);
+        }
+
+        if (!proto.getUser().getId().equals(userDetails.getUserEntity().getId())) {
+            throw new SecurityException("You are not authorized to delete this post.");
+        }
+
+        protoRepository.deleteById(id);
+        return "redirect:/";
     }
 }
