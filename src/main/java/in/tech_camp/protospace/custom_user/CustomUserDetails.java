@@ -35,7 +35,7 @@ public class CustomUserDetails implements UserDetails {
         return user.getEmail(); // ログインIDとして使う
     }
 
-      public Integer getId() {
+      public long getId() {
       return user.getId();
     }
 
