@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import in.tech_camp.protospace.custom_user.CustomUserDetails;
 import in.tech_camp.protospace.entity.ProtoEntity;
+import in.tech_camp.protospace.form.ProtoForm;
 import in.tech_camp.protospace.repository.ProtoRepository;
 
 @Controller
@@ -28,5 +29,11 @@ public class ProtoController {
         model.addAttribute("prototypes", prototypes);
         model.addAttribute("user", userDetails != null ? userDetails.getUserEntity() : null);
         return "protos/index";
+    }
+
+    @GetMapping("/protos/new")
+    public String newProto(Model model) {
+        model.addAttribute("protoForm", new ProtoForm());
+        return "protos/new";
     }
 }
