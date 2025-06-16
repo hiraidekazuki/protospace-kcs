@@ -1,41 +1,79 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>マイページ</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProtoSpace</title>
+
+  <link th:href="@{/css/style.css}" rel="stylesheet" media="all" />
+  <script th:src="@{/packs/js/application.js}"></script>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet" />
 </head>
+
 <body>
-  <header class="header">
+
+  <!-- ヘッダー共通化 -->
+  <div th:insert="~{header :: header}"></div>
+
+  <main class="main">
     <div class="inner">
-      <div class="nav">
-          <div class="nav__left">
-            <a href="/">
-            <img class="logo" src="/images/logo-b99f177af8fb82de2d6d7b86e95c7f329d3d143edd8b225bc2875ad9dd6e0cc3.png">
+      <div class="user__wrapper">
+
+        <!-- ユーザー情報 -->
+        <h2 class="page-heading" 
+            th:text="|${userEntity != null ? userEntity.name : 'ゲスト'}さんの情報|">
+          ユーザー名さんの情報
+        </h2>
+        <table class="table" th:if="${userEntity != null}">
+          <tbody>
+            <tr>
+              <th class="table__col1">名前</th>
+              <td class="table__col2" th:text="${userEntity.name}">名前</td>
+            </tr>
+            <tr>
+              <th class="table__col1">プロフィール</th>
+              <td class="table__col2" th:text="${userEntity.profile}">プロフィール</td>
+            </tr>
+            <tr>
+              <th class="table__col1">所属</th>
+              <td class="table__col2" th:text="${userEntity.groupName}">所属</td>
+            </tr>
+            <tr>
+              <th class="table__col1">役職</th>
+              <td class="table__col2" th:text="${userEntity.post}">役職</td>
+            </tr>
+          </tbody>
+        </table>
+
+        プロトタイプ一覧
+        <h2 class="page-heading"
+            th:text="|${userEntity != null ? userEntity.name : 'ゲスト'}さんのプロトタイプ|">
+          さんのプロトタイプ
+        </h2>
+
+        <div class="card__wrapper" th:if="${prototypes != null and !prototypes.isEmpty()}">
+          <div class="card" th:each="proto : ${prototypes}">
+            <a th:href="@{'/prototypes/' + ${proto.id}}">
+              <img class="card__img" th:src="${proto.image}" alt="プロトタイプ画像" />
             </a>
-          </div>
-              <div class="nav__right">
-              <div sec:authorize="isAuthenticated()" style="display: flex; align-items: center; gap: 10px;">
-             <form th:action="@{/logout}" method="post" style="margin: 0;">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" class="nav__btn">ログアウト</button>
-             </form>
-          
-            <a class="nav__btn" th:href="@{/prototypes/new}">New Proto</a>
+            <div class="card__body">
+              <p class="card__title" th:text="${proto.name}">タイトル</p>
+              <p class="card__summary" th:text="${proto.catchcopy}">キャッチコピー</p>
+<a class="card__user"
+   th:href="@{'/users/' + ${proto.user.id}}"
+   th:text="'by ' + ${proto.user.name}">by ユーザー名</a>
+            </div>
           </div>
         </div>
+
+        <p th:if="${prototypes == null or prototypes.isEmpty()}">プロトタイプはまだ投稿されていません。</p>
+
       </div>
     </div>
-  </header>
+  </main>
 
-  <div class = "welcome">
-    <h1><span th:text="|ようこそ、${name} さん！|"></span></h1>
-  </div>
+  <!-- フッター共通化 -->
+  <div th:insert="~{footer :: footer}"></div>
 
-  <footer class="under">
-      <p class="copyright">Copyright © PROTO SPACE All rights reserved.</p>
-  </footer>
 </body>
 </html>
