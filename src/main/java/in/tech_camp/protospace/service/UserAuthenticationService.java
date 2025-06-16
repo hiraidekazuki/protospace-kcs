@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import in.tech_camp.protospace.custom_user.CustomUserDetail;
+import in.tech_camp.protospace.custom_user.CustomUserDetails;
 import in.tech_camp.protospace.entity.UserEntity;
 import in.tech_camp.protospace.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class UserAuthenticationService implements UserDetailsService {
           throw new UsernameNotFoundException("User not found with email: " + email);
       }
 
-      return new CustomUserDetail(userEntity);
+      return new CustomUserDetails(userEntity);
   }
 
 }

@@ -13,7 +13,7 @@ import in.tech_camp.protospace.entity.UserEntity;
 public interface UserRepository {
 
     @Select("SELECT * FROM users WHERE id = #{id}")
-    UserEntity findById(Integer id);
+    UserEntity findById(Long id);
 
     @Select("SELECT * FROM users WHERE email = #{email}") //ログイン時にそのメールアドレスのユーザーが存在するかの確認
     UserEntity findByEmail(String email);
