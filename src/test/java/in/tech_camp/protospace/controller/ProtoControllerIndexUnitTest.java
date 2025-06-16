@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import in.tech_camp.protospace.component.ImageUrl;
 import in.tech_camp.protospace.entity.ProtoEntity;
 import in.tech_camp.protospace.entity.UserEntity;
+import in.tech_camp.protospace.repository.CommentRepository;
 import in.tech_camp.protospace.repository.ProtoRepository;
-
 
 @WebMvcTest(controllers = ProtoController.class,
             excludeAutoConfiguration = SecurityAutoConfiguration.class)
@@ -38,6 +38,9 @@ public class ProtoControllerIndexUnitTest {
 
     @MockBean
     private ImageUrl imageUrl;
+
+    @MockBean
+    private CommentRepository commentRepository;  // ← 追加しました
 
     // 誰でも閲覧できることを確認
     @Test
@@ -66,13 +69,13 @@ public class ProtoControllerIndexUnitTest {
     public void testShowIndex_withPrototypes_shouldShowDetails() throws Exception {
         // モックユーザーを作成
         UserEntity user = new UserEntity();
-        user.setName("投稿者太郎");
+        user.setName("投稿者");
 
         // モックプロトタイプを作成
         ProtoEntity proto = new ProtoEntity();
         proto.setId(1);
         proto.setName("テストプロトタイプ");
-        proto.setCatchcopy("キャッチコピー");
+        proto.setCatchCopy("キャッチコピー");
         proto.setImage("test.png");
         proto.setUser(user);
 
@@ -85,9 +88,9 @@ public class ProtoControllerIndexUnitTest {
             .andExpect(model().attribute("prototypes", hasItem(
                 allOf(
                     hasProperty("name", is("テストプロトタイプ")),
-                    hasProperty("catchcopy", is("キャッチコピー")),
+                    hasProperty("catchCopy", is("キャッチコピー")),
                     hasProperty("image", is("test.png")),
-                    hasProperty("user", hasProperty("name", is("投稿者太郎")))
+                    hasProperty("user", hasProperty("name", is("投稿者")))
                 )
             )));
     }

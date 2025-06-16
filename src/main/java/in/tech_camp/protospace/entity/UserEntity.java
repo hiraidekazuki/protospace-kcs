@@ -1,53 +1,38 @@
 package in.tech_camp.protospace.entity;
 
+import jakarta.persistence.*;
 
-// 仮置き
-
-import java.util.List;
-
+@Entity
+@Table(name = "users")
 public class UserEntity {
-    private Integer id;
-    private String name;
-    private List<ProtoEntity> protos;
-    private List<CommentEntity> comments;
 
-public class UserEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String name;
+
     private String email;
-    private String password;
 
+    private String password; // ← 追加
 
-    // 他のカラム（profile, groupName, post）は必要になったら追加
+    // ===== Getter / Setter =====
 
-    // getter/setter
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
-    
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
-
-
-    public List<ProtoEntity> getProtos() {
-        return protos;
-    }
-    public void setProtos(List<ProtoEntity> protos) {
-        this.protos = protos;
-    }
-
-    public List<CommentEntity> getComments() {
-        return comments;
-    }
-    public void setComments(List<CommentEntity> comments) {
-        this.comments = comments;
 
     public String getEmail() {
         return email;
@@ -57,12 +42,11 @@ public class UserEntity {
         this.email = email;
     }
 
-    public String getPassword() {
+    public String getPassword() { // ← 追加
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password) { // ← 追加
         this.password = password;
-
     }
 }

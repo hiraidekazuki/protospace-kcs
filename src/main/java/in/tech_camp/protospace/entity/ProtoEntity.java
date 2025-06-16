@@ -1,18 +1,41 @@
 package in.tech_camp.protospace.entity;
 
+import jakarta.persistence.*;
+import java.util.List;
+import java.util.Date;
+
+@Entity
+@Table(name = "protos")
 public class ProtoEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String name;
-    private String catchcopy;  // ← 全て小文字に修正
+
+    @Column(name = "catchcopy")
+    private String catchCopy;
+
     private String concept;
+
     private String image;
+
+    @Column(name = "user_id")
     private Integer userId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
 
-    public ProtoEntity() {
-    }
+    @OneToMany(mappedBy = "proto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentEntity> comments;
+
+    // 追加したcreatedDateフィールド
+    @Column(name = "created_date")
+    private Date createdDate;
+
+    // getter/setter手動追加例
 
     public Integer getId() {
         return id;
@@ -30,13 +53,12 @@ public class ProtoEntity {
         this.name = name;
     }
 
-    // catchcopy のgetter/setter
-    public String getCatchcopy() {
-        return catchcopy;
+    public String getCatchCopy() {
+        return catchCopy;
     }
 
-    public void setCatchcopy(String catchcopy) {
-        this.catchcopy = catchcopy;
+    public void setCatchCopy(String catchCopy) {
+        this.catchCopy = catchCopy;
     }
 
     public String getConcept() {
@@ -69,5 +91,22 @@ public class ProtoEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public List<CommentEntity> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentEntity> comments) {
+        this.comments = comments;
+    }
+
+    // 追加したgetter/setter
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }

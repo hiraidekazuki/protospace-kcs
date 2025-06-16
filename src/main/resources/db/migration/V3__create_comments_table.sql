@@ -1,3 +1,4 @@
+-- V3__create_comments_table.sql
 CREATE TABLE comments (
   id       SERIAL       NOT NULL,
   text     VARCHAR(512) NOT NULL,

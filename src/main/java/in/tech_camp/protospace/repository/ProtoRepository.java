@@ -24,7 +24,7 @@ public interface ProtoRepository {
   @Results({
       @Result(property = "id", column = "id"),
       @Result(property = "name", column = "name"),
-      @Result(property = "catchcopy", column = "catchcopy"),
+      @Result(property = "catchCopy", column = "catchcopy"),   // ← 修正
       @Result(property = "concept", column = "concept"),
       @Result(property = "image", column = "image"),
       @Result(property = "userId", column = "user_id"),
@@ -34,21 +34,19 @@ public interface ProtoRepository {
   })
   List<ProtoEntity> findAll();
 
-
   @Select("SELECT * FROM protos WHERE id = #{id}")
   @Results(value = {
     @Result(property = "id", column = "id"),
+    @Result(property = "catchCopy", column = "catchcopy"),  // ← 追加（忘れずに）
     @Result(property = "user", column = "user_id",
           one = @One(select = "in.tech_camp.protospace.repository.UserRepository.findById")),
     @Result(property = "comments", column = "id",
           many = @Many(select = "in.tech_camp.protospace.repository.CommentRepository.findByProtoId"))
-})
-ProtoEntity findById(Integer id);
-
-
+  })
+  ProtoEntity findById(Integer id);
 
   @Insert("INSERT INTO protos (name, catchcopy, concept, image, user_id) " +
-          "VALUES (#{name}, #{catchcopy}, #{concept}, #{image}, #{userId})")
+          "VALUES (#{name}, #{catchCopy}, #{concept}, #{image}, #{userId})")   // ← 修正
   @Options(useGeneratedKeys = true, keyProperty = "id")
   void save(ProtoEntity proto);
 

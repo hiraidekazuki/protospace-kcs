@@ -39,8 +39,11 @@
      </div>
 
       <div class="prototype__image">
-        <img th:src="@{${proto.image}}" alt="ユーザーが投稿した画像">
+    <!-- キャッシュ防止用のタイムスタンプを追加 -->
+        <img th:src="@{${proto.image} + '?v=' + ${#dates.format(proto.createdDate, 'yyyyMMddHHmmss')}}" alt="ユーザーが投稿した画像" />
       </div>
+
+
 
       <div class="prototype__body">
         <div class="prototype__detail">

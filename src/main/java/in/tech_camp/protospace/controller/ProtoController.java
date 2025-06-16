@@ -4,20 +4,23 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 
+import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
-import in.tech_camp.protospace.component.ImageUrl;
 import in.tech_camp.protospace.custom_user.CustomUserDetail;
 import in.tech_camp.protospace.entity.CommentEntity;
 import in.tech_camp.protospace.entity.ProtoEntity;
@@ -25,32 +28,37 @@ import in.tech_camp.protospace.entity.UserEntity;
 import in.tech_camp.protospace.form.CommentForm;
 import in.tech_camp.protospace.form.ProtoForm;
 import in.tech_camp.protospace.repository.CommentRepository;
-
 import in.tech_camp.protospace.repository.ProtoRepository;
 
 @Controller
 public class ProtoController {
 
     private final CommentRepository commentRepository;
-    private final ImageUrl imageUrl;
     private final ProtoRepository protoRepository;
 
-    @Autowired
-    public ProtoController(ImageUrl imageUrl, ProtoRepository protoRepository) {
-        this.imageUrl = imageUrl;
+    @Value("${upload.dir}") // アプリケーションの設定からディレクトリを取得
+    private String uploadDir;
+
+    @Value("${image.url}") // 画像URLの設定（静的リソースとして提供されるパス）
+    private String imageUrl;
+
+    public ProtoController(ProtoRepository protoRepository, CommentRepository commentRepository) {
         this.protoRepository = protoRepository;
         this.commentRepository = commentRepository;
     }
 
-     @GetMapping("/")
+    @GetMapping({"/", "/protos"})
     public String showIndex(Model model) {
         List<ProtoEntity> prototypes = protoRepository.findAll();
         model.addAttribute("prototypes", prototypes);
-
         return "protos/index";
     }
 
-    // 投稿作成処理
+    @GetMapping("/protos/new")
+    public String showNewProtoForm(Model model) {
+        model.addAttribute("protoForm", new ProtoForm());
+        return "protos/new";
+    }
 
     @PostMapping("/protos")
     public String createProto(
@@ -65,15 +73,21 @@ public class ProtoController {
         String fileName = null;
         MultipartFile imageFile = protoForm.getImage();
 
-        // 画像保存処理
+        // 画像ファイルがアップロードされた場合の処理
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
-                String uploadDir = imageUrl.getUrl();
-                fileName = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
-                         + "_" + imageFile.getOriginalFilename();
-                Path imagePath = Paths.get(uploadDir, fileName);
+                // UUIDを付与してファイル名をユニークにする
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+                Path imagePath = Paths.get(uploadDir, uniqueFileName);
+                
+                // 画像保存先ディレクトリを作成
                 Files.createDirectories(imagePath.getParent());
+                
+                // 画像を保存
                 Files.copy(imageFile.getInputStream(), imagePath);
+                
+                // 画像のパス（URL）を設定
+                fileName = imageUrl + uniqueFileName; // 例: /uploads/ユニークファイル名
             } catch (IOException e) {
                 e.printStackTrace();
                 model.addAttribute("error", "画像の保存に失敗しました。");
@@ -81,30 +95,26 @@ public class ProtoController {
             }
         }
 
-        // フォームから受け取った値でProtoEntityを構築
+        // ProtoEntityに新しいプロトタイプ情報を保存
         ProtoEntity proto = new ProtoEntity();
         proto.setName(protoForm.getName());
         proto.setCatchCopy(protoForm.getCatchCopy());
         proto.setConcept(protoForm.getConcept());
-        proto.setImage(fileName != null ? "/uploads/" + fileName : null);
+        proto.setImage(fileName); // 画像URLを保存
 
-        // ログインユーザーIDをセット
+        // ユーザー情報を設定
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetail) {
             CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
             proto.setUserId(userDetails.getId());
         } else {
-            proto.setUserId(0); // ログインしていない場合の仮置き
+            proto.setUserId(0); // 未認証ユーザー対応（仮）
         }
 
-        System.out.println("=== デバッグログ ===");
-        System.out.println("フォームのname: " + protoForm.getName());
-        System.out.println("エンティティのname: " + proto.getName());
-        System.out.println("セットされたユーザーID: " + proto.getUserId());
-
         try {
-            protoRepository.save(proto); // IDがセットされる
-            return "redirect:/protos"; // 保存後に一覧ページへ遷移
+            // プロトタイプをデータベースに保存
+            protoRepository.save(proto);
+            return "redirect:/"; // トップページへリダイレクト
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "保存に失敗しました。");
@@ -112,20 +122,19 @@ public class ProtoController {
         }
     }
 
-    // 投稿詳細ページ表示（コメントも読み込む）
     @GetMapping("/protos/{protoId}")
     public String showProtoDetail(@PathVariable("protoId") Integer protoId, Model model) {
         ProtoEntity proto = protoRepository.findById(protoId);
         if (proto == null) {
             model.addAttribute("error", "指定された投稿が見つかりません。");
-            return "error"; // 適切なエラーページに切り替えてください
+            return "error";
         }
 
-        // DBからコメント一覧を取得しセット
+        // コメントの設定
         List<CommentEntity> comments = commentRepository.findByProtoId(protoId);
         proto.setComments(comments);
 
-        // 仮ユーザー情報セット（nullチェック）
+        // ユーザー情報がnullの場合は仮ユーザーを設定
         if (proto.getUser() == null) {
             UserEntity dummyUser = new UserEntity();
             dummyUser.setId(0);
@@ -133,27 +142,9 @@ public class ProtoController {
             proto.setUser(dummyUser);
         }
 
-        // コメントフォームオブジェクトをモデルに追加
         model.addAttribute("commentForm", new CommentForm());
         model.addAttribute("proto", proto);
 
         return "protos/detail";
     }
 }
-
-// // テスト用詳細表示（手動作成のダミーデータ）
-// @GetMapping("/test-detail")
-// public String testDetail(Model model) {
-//     ProtoEntity proto = new ProtoEntity();
-//     proto.setId(1);
-//     proto.setName("テスト");
-//     proto.setCatchCopy("これはキャッチコピーです！");
-//     proto.setConcept("これはコンセプトです。");
-//     proto.setImage("/uploads/test_image.png");
-//     proto.setUserName("test_user");
-
-//     proto.setUser(new UserEntity()); // null回避用の空ユーザー
-
-//     model.addAttribute("proto", proto);
-//     return "protos/detail";
-// }
