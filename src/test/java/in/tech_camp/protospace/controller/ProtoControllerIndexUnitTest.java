@@ -70,7 +70,7 @@ public class ProtoControllerIndexUnitTest {
 
         // モックプロトタイプを作成
         ProtoEntity proto = new ProtoEntity();
-        proto.setId(1);
+        proto.setId(1L);
         proto.setName("テストプロトタイプ");
         proto.setCatchcopy("キャッチコピー");
         proto.setImage("test.png");

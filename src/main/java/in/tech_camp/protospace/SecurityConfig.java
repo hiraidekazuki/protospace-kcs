@@ -1,4 +1,5 @@
 package in.tech_camp.protospace;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,28 +14,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import in.tech_camp.protospace.service.CustomUserDetailsService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
     @Autowired
     private CustomUserDetailsService userDetailsService;
-    // :閉じた錠と鍵: セキュリティルールの定義
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/",
-                    "/css/**",
-                    "/images/**",
-                    "/users/login",
-                    "/users/sign_up",
-                    "/users/*",
-                    "/protos/*"
+                    "/",                    // トップページ
+                    "/css/**",              // CSSファイル
+                    "/images/**",           // 画像ファイル
+                    "/users/login",         // ログインページ
+                    "/users/sign_up",       // サインアップページ
+                    "/users/{id}",          // 個別ユーザーページ（手動マッチ不可なので↓に統合）
+                    "/users/**",            // ユーザー詳細ページなど全般
+                    "/protos/**",           // プロトタイプ関連ページ
+                    "/assets/**",           // 静的ファイル
+                    "/packs/**"             // JSパック等
                 ).permitAll()
-                .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(HttpMethod.POST, "/users").permitAll() // ユーザー登録POST
+                .anyRequest().authenticated() // 他の全ては認証必須
             )
             .formLogin(form -> form
                 .loginPage("/users/login")
@@ -48,14 +54,15 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
                 .permitAll()
             );
+
         return http.build();
     }
-    // :鍵: パスワードエンコーダー
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    // :チェックマーク_緑: 推奨される認証マネージャーの定義方法
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();

@@ -1,33 +1,43 @@
+
 package in.tech_camp.protospace.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "users")  // テーブル名に合わせてください
 public class UserEntity {
-    private Integer id;
-    private String name;
+
+    @Id
+    private Long id;
+
     private String email;
+
     private String password;
 
-    // 他のカラム（profile, groupName, post）は必要になったら追加
+    private String name;
 
-    public Integer getId() {
+    private String profile;
+
+    @Column(name = "group_name")  // ここでDBのカラム名を指定
+    private String groupName;
+
+    private String post;
+
+    // getter/setterはそのまま
+
+    public Long getId() {
         return id;
     }
-
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -35,8 +45,103 @@ public class UserEntity {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getPost() {
+        return post;
+    }
+    public void setPost(String post) {
+        this.post = post;
+    }
 }
+
+// package in.tech_camp.protospace.entity;
+
+// public class UserEntity {
+//     private Integer id;
+//     private String email;
+//     private String password;
+//     private String name;
+//     private String profile;
+//     private String groupName;
+//     private String post;
+
+//     public Integer getId() {
+//         return id;
+//     }
+
+//     public void setId(Integer id) {
+//         this.id = id;
+//     }
+
+//     public String getEmail() {
+//         return email;
+//     }
+
+//     public void setEmail(String email) {
+//         this.email = email;
+//     }
+
+//     public String getPassword() {
+//         return password;
+//     }
+
+//     public void setPassword(String password) {
+//         this.password = password;
+//     }
+
+//     public String getName() {
+//         return name;
+//     }
+
+//     public void setName(String name) {
+//         this.name = name;
+//     }
+
+//     public String getProfile() {
+//         return profile;
+//     }
+
+//     public void setProfile(String profile) {
+//         this.profile = profile;
+//     }
+
+//     public String getGroupName() {
+//         return groupName;
+//     }
+
+//     public void setGroupName(String groupName) {
+//         this.groupName = groupName;
+//     }
+
+//     public String getPost() {
+//         return post;
+//     }
+
+//     public void setPost(String post) {
+//         this.post = post;
+//     }
+// }
