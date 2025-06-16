@@ -18,22 +18,38 @@
   <main class="main">
     <div class="inner">
       <div class="user__wrapper">
-    <!-- あいさつ表示 -->
-    <div class="greeting" th:if="${user != null}">
-      こんにちは、
-      <span th:if="${user.name == 'ゲスト'}">
-        ゲストさん
-      </span>
-      <span th:unless="${user.name == 'ゲスト'}">
-        <a class="greeting__link" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.name} + 'さん'">ユーザー名</a>
-        <!-- ✅ マイページへのリンク追加 -->
-        <span class="mypage-link">
-          <a th:href="@{/mypage}"></a>
-        </span>
-      </span>
-    </div>
-        <!-- プロトタイプ一覧 -->
 
+        <!-- ユーザー情報 -->
+        <h2 class="page-heading" 
+            th:text="|${userEntity != null ? userEntity.name : 'ゲスト'}さんの情報|">
+          ユーザー名さんの情報
+        </h2>
+        <table class="table" th:if="${userEntity != null}">
+          <tbody>
+            <tr>
+              <th class="table__col1">名前</th>
+              <td class="table__col2" th:text="${userEntity.name}">名前</td>
+            </tr>
+            <tr>
+              <th class="table__col1">プロフィール</th>
+              <td class="table__col2" th:text="${userEntity.profile}">プロフィール</td>
+            </tr>
+            <tr>
+              <th class="table__col1">所属</th>
+              <td class="table__col2" th:text="${userEntity.groupName}">所属</td>
+            </tr>
+            <tr>
+              <th class="table__col1">役職</th>
+              <td class="table__col2" th:text="${userEntity.post}">役職</td>
+            </tr>
+          </tbody>
+        </table>
+
+        プロトタイプ一覧
+        <h2 class="page-heading"
+            th:text="|${userEntity != null ? userEntity.name : 'ゲスト'}さんのプロトタイプ|">
+          さんのプロトタイプ
+        </h2>
 
         <div class="card__wrapper" th:if="${prototypes != null and !prototypes.isEmpty()}">
           <div class="card" th:each="proto : ${prototypes}">
@@ -43,9 +59,9 @@
             <div class="card__body">
               <p class="card__title" th:text="${proto.name}">タイトル</p>
               <p class="card__summary" th:text="${proto.catchcopy}">キャッチコピー</p>
-              <a class="card__user"
-                 th:href="@{'/users/' + ${proto.user.id}}"
-                 th:text="'by ' + ${proto.user.name}">by ユーザー名</a>
+<a class="card__user"
+   th:href="@{'/users/' + ${proto.user.id}}"
+   th:text="'by ' + ${proto.user.name}">by ユーザー名</a>
             </div>
           </div>
         </div>
