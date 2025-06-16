@@ -55,5 +55,5 @@ public interface ProtoRepository {
       @Result(property = "user.id", column = "user_id_alias"),
       @Result(property = "user.name", column = "user_name_alias")
   })
-  List<ProtoEntity> findByUserId(Integer userId);
+  List<ProtoEntity> findByUserId(Long userId);
 }

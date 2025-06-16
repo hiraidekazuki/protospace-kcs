@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 public class UserEntity {
 
     @Id
-    private Integer id;
+    private Long id;
 
     private String email;
 
@@ -28,10 +28,10 @@ public class UserEntity {
 
     // getter/setterはそのまま
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
