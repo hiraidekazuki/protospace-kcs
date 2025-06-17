@@ -14,6 +14,7 @@ import in.tech_camp.protospace.entity.CommentEntity;
 
 @Mapper
 public interface CommentRepository {
+        @Select("SELECT c.*, u.id AS user_id, u.nickname AS user_name FROM comments c JOIN users u ON c.user_id = u.id WHERE c.proto_id = #{protoId}")
     @Select("SELECT * FROM comments WHERE proto_id = #{protoId}")
     @Results(value = {
         @Result(property = "user", column = "user_id", 
