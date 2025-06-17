@@ -1,5 +1,24 @@
 package in.tech_camp.protospace.entity;
 
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "users")
+public class UserEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private String name;
+
+    private String email;
+
+    private String password; // ← 追加
+
+    // ===== Getter / Setter =====
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,6 +36,7 @@ public class UserEntity {
     private String password;
 
     private String name;
+
 
     private String profile;
 
@@ -41,10 +61,15 @@ public class UserEntity {
         this.email = email;
     }
 
-    public String getPassword() {
+    public String getPassword() { // ← 追加
         return password;
     }
+
+
+    public void setPassword(String password) { // ← 追加
+
     public void setPassword(String password) {
+
         this.password = password;
     }
 

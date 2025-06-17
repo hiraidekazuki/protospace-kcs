@@ -1,4 +1,3 @@
-<!-- templates/prototypes/new.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -8,7 +7,6 @@
 </head>
 <body>
 
-  <!-- headerフラグメント -->
   <div th:insert="~{header :: header}"></div>
 
   <div class="main">
@@ -16,40 +14,45 @@
       <div class="form__wrapper">
         <h2 class="page-heading">新規プロトタイプ投稿</h2>
 
-        <!-- フォーム -->
         <form th:action="@{/protos}" method="post" enctype="multipart/form-data" th:object="${protoForm}">
 
-          <!-- フォーム内で全体エラー表示 -->
+          <!-- バリデーションエラー表示 -->
           <div th:if="${#fields.hasErrors('*')}" class="error-messages">
             <ul>
               <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
             </ul>
           </div>
 
+          <!-- プロトタイプ名 -->
           <div class="field">
             <label for="name">プロトタイプの名称</label><br />
             <input type="text" id="name" th:field="*{name}" />
           </div>
 
+          <!-- キャッチコピー -->
           <div class="field">
             <label for="catchcopy">キャッチコピー</label><br />
             <textarea class="form__text" id="catchcopy" th:field="*{catchCopy}"></textarea>
           </div>
 
+          <!-- コンセプト -->
           <div class="field">
             <label for="concept">コンセプト</label><br />
             <textarea class="form__text" id="concept" th:field="*{concept}"></textarea>
           </div>
 
+          <!-- 画像ファイル選択 -->
           <div class="field">
             <label for="image">プロトタイプの画像</label><br />
             <input type="file" id="image" th:field="*{image}" accept="image/*" />
           </div>
 
-          <div th:if="${message?.image}">
-            <img th:src="@{${message.image}}" alt="アップロード画像" style="width: 500px; height: 500px;" />
+          <!-- 画像アップロード確認 -->
+          <div th:if="${protoForm.image != null}">
+            <img th:src="@{'/uploads/' + ${protoForm.image}}" alt="アップロード画像" style="width: 500px; height: 500px;" />
           </div>
 
+          <!-- 保存ボタン -->
           <div class="actions">
             <input type="submit" value="保存する" class="form__btn" />
           </div>
@@ -58,7 +61,6 @@
     </div>
   </div>
 
-  <!-- footerフラグメント -->
   <div th:insert="~{footer :: footer}"></div>
 
 </body>

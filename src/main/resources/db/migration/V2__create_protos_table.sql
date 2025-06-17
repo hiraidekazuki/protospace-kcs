@@ -1,3 +1,4 @@
+-- V2__create_protos_table.sql
 CREATE TABLE protos (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,

@@ -76,6 +76,11 @@ public class UserController {
         String hashedPassword = passwordEncoder.encode(form.getPassword());
         user.setPassword(hashedPassword);
 
+    // ログインページのURLを /users/login に変更
+    @GetMapping("/users/login")
+    public String showLoginForm() {
+        return "login";  // templates/login.html を表示
+
         // データベースに保存
         userRepository.insert(user);  // saveメソッドに修正
 
@@ -117,5 +122,6 @@ public class UserController {
         model.addAttribute("prototypes", prototypes);
 
         return "users/mypage";
+
     }
 }

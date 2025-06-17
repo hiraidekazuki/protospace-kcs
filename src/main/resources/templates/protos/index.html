@@ -26,12 +26,30 @@
       </span>
       <span th:unless="${user.name == 'ゲスト'}">
         <a class="greeting__link" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.name} + 'さん'">ユーザー名</a>
-        <!-- ✅ マイページへのリンク追加 -->
+        <!-- マイページへのリンク追加 -->
         <span class="mypage-link">
           <a th:href="@{/mypage}"></a>
         </span>
       </span>
     </div>
+
+
+    <!-- プロトタイプ一覧の表示 -->
+    <div class="contents row">
+      <div class="card__wrapper">
+        <div class="card" th:each="proto : ${prototypes}">
+          <a th:href="@{'/protos/' + ${proto.id}}">
+            <img class="card__img" th:src="${proto.image}" alt="プロトタイプ画像" />
+          </a>
+          <div class="card__body">
+            <p class="card__title" th:text="${proto.name}">タイトル</p>
+            <!-- catchcopy → catchCopyに修正 -->
+            <p class="card__summary" th:text="${proto.catchCopy}">キャッチコピー</p>
+            <!-- proto.userのnullチェック追加 -->
+            <a class="card__user" 
+               th:href="@{'/users/' + ${proto.user != null ? proto.user.id : 0}}" 
+               th:text="${proto.user != null ? 'by ' + proto.user.name : 'by ゲスト'}">ユーザー名</a>
+
         <!-- プロトタイプ一覧 -->
 
 
@@ -47,6 +65,7 @@
                  th:href="@{'/users/' + ${proto.user.id}}"
                  th:text="'by ' + ${proto.user.name}">by ユーザー名</a>
             </div>
+
           </div>
         </div>
 

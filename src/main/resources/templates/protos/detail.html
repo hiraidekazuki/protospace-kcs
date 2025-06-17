@@ -29,7 +29,7 @@
 
       <!-- 編集・削除ボタンをログインしているユーザーだけに表示 -->
       <div class="prototype__manage" 
-           th:if="${#authorization.expression('isAuthenticated()')and proto.user.id == principal.id}">
+           th:if="${#authorization.expression('isAuthenticated()') and proto.user.id == principal.id}">
        <form th:action="@{/protos/{protoId}/update(protoId=${proto.id})}" method="post">
          <input type="submit" class="prototype__btn" value="編集する">
        </form>
@@ -39,8 +39,11 @@
      </div>
 
       <div class="prototype__image">
-        <img th:src="@{${proto.image}}" alt="ユーザーが投稿した画像">
+    <!-- キャッシュ防止用のタイムスタンプを追加 -->
+        <img th:src="@{${proto.image} + '?v=' + ${#dates.format(proto.createdDate, 'yyyyMMddHHmmss')}}" alt="ユーザーが投稿した画像" />
       </div>
+
+
 
       <div class="prototype__body">
         <div class="prototype__detail">
@@ -54,18 +57,32 @@
       </div>
 
       <div class="prototype__comments">
-        <!-- コメントフォーム修正 -->
-        <form th:action="@{/protos/{protoId}/comments(protoId=${proto.id})}" method="post" th:object="${comment}">
-          <div class="field">
-            <label for="comment_content">コメント</label><br>
-            <input type="text" th:field="*{content}" id="comment_content">
-          </div>
-          <div class="actions">
-            <input type="submit" value="送信する" class="form__btn">
-          </div>
-        </form>
+        <!-- ログイン判定・エラーメッセージ・コメントフォーム -->
+        <div th:if="${#authorization.expression('isAuthenticated()')}">
 
-        <!-- コメントリスト表示の条件制御 -->
+          <!-- エラーメッセージ表示 -->
+          <div th:if="${errorMessages}" th:each="error : ${errorMessages}">
+            <div th:text="${error.defaultMessage}" style="color:red;"></div>
+          </div>
+
+          <!-- コメント投稿フォーム -->
+          <form th:action="@{/protos/{protoId}/comments(protoId=${proto.id})}" method="post" th:object="${commentForm}">
+            <div class="field">
+              <label for="comment_content">コメント</label><br>
+              <input type="text" th:field="*{content}" id="comment_content" placeholder="コメントを入力してください">
+            </div>
+            <div class="actions">
+              <input type="submit" value="送信する" class="form__btn">
+            </div>
+          </form>
+
+        </div>
+
+        <div th:if="${#authorization.expression('!isAuthenticated()')}">
+          
+        </div>
+
+        <!-- コメントリスト表示 -->
         <ul class="comments_lists" th:if="${proto.comments != null and !proto.comments.isEmpty()}">
           <li th:each="comment : ${proto.comments}" th:text="${comment.content}"></li>
         </ul>

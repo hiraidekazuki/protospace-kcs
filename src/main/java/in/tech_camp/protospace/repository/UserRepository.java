@@ -15,16 +15,21 @@ import in.tech_camp.protospace.entity.UserEntity;
 public interface UserRepository {
 
     @Select("SELECT * FROM users WHERE id = #{id}")
+
+    UserEntity findById(Integer id);
+
     @Results({
         @Result(property = "groupName", column = "group_name")
     })
     UserEntity findById(Long id);
+
 
     @Select("SELECT * FROM users WHERE email = #{email}")
     @Results({
         @Result(property = "groupName", column = "group_name")
     })
     UserEntity findByEmail(String email);
+
 
     @Select("SELECT COUNT(*) > 0 FROM users WHERE email = #{email}")
     boolean existsByEmail(String email);
@@ -41,4 +46,5 @@ public interface UserRepository {
         @Result(property = "groupName", column = "group_name")
     })
     List<UserEntity> findAll();
+
 }

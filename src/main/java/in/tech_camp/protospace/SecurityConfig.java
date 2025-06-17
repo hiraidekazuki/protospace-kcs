@@ -23,6 +23,8 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -37,12 +39,23 @@ public class SecurityConfig {
         return authProvider;
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
+
+                    "/",
+                    "/css/**",
+                    "/images/**",
+                    "/uploads/**",
+                    "/users/login",
+                    "/users/sign_up",
+                    "/users/**",       // 任意のユーザー関連パス
+                    "/protos/**"       // ← これで new/detail など全て許可
+
                     "/",                    // トップページ
                     "/css/**",              // CSSファイル
                     "/images/**",           // 画像ファイル
@@ -53,6 +66,7 @@ public class SecurityConfig {
                     "/protos/**",           // プロトタイプ関連ページ
                     "/assets/**",           // 静的ファイル
                     "/packs/**"             // JSパック等
+
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/users").permitAll() // ユーザー登録POST
                 .anyRequest().authenticated() // 他の全ては認証必須
@@ -69,14 +83,25 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .permitAll()
+
+            );
+
             )
             // ここで認証プロバイダを指定
             .authenticationProvider(authenticationProvider());
 
+
         return http.build();
     }
 
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     // AuthenticationManagerもBean登録（Spring Securityの認証管理用）
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
