@@ -1,13 +1,29 @@
 package in.tech_camp.protospace.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * プロトタイプ（投稿）を表すエンティティ。
+ */
 public class ProtoEntity {
     private Long id;
     private String name;
-    private String catchcopy;
+
+    // Javaの命名規則に合わせてcamelCaseに修正
+    private String catchCopy;
+
     private String concept;
     private String image;
+
+    // 外部キー（DB保存用）
     private Long userId;
+
+    // 関連ユーザー（JOIN取得用）
     private UserEntity user;
+
+    // 関連コメント（JOIN取得用）※仮実装。初期値は空リストでnull安全に
+    private List<CommentEntity> comments = new ArrayList<>();
 
     // --- Getter & Setter ---
 
@@ -27,12 +43,12 @@ public class ProtoEntity {
         this.name = name;
     }
 
-    public String getCatchcopy() {
-        return catchcopy;
+    public String getCatchCopy() {
+        return catchCopy;
     }
 
-    public void setCatchcopy(String catchcopy) {
-        this.catchcopy = catchcopy;
+    public void setCatchCopy(String catchCopy) {
+        this.catchCopy = catchCopy;
     }
 
     public String getConcept() {
@@ -66,15 +82,26 @@ public class ProtoEntity {
     public void setUser(UserEntity user) {
         this.user = user;
     }
+  
+    public List<CommentEntity> getComments() {
+        return comments;
+    }
 
-    private String user_name;
+    public void setComments(List<CommentEntity> comments) {
+        this.comments = comments;
+    }
 
-public String getUser_name() {
-    return user_name;
-}
-
-public void setUser_name(String user_name) {
-    this.user_name = user_name;
-}
-
+    @Override
+    public String toString() {
+        return "ProtoEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", catchCopy='" + catchCopy + '\'' +
+                ", concept='" + concept + '\'' +
+                ", image='" + image + '\'' +
+                ", userId=" + userId +
+                ", user=" + (user != null ? user.getName() : "null") +
+                ", comments=" + (comments != null ? comments.size() + "件" : "null") +
+                '}';
+    }
 }

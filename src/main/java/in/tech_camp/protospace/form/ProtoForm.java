@@ -12,11 +12,10 @@ public class ProtoForm {
     private String name;
 
     @NotBlank(message = "キャッチコピーは必須です")
-    private String catchCopy;
+    private String catchCopy;  // camelCaseでOK。ProtoEntity側とのマッピングはコントローラ等で調整。
 
     @NotBlank(message = "コンセプトは必須です")
     private String concept;
 
-    private MultipartFile image; 
-
+    private MultipartFile image; // 画像アップロード用
 }

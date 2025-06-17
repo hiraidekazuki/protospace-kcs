@@ -48,14 +48,15 @@ public class SecurityConfig {
                     "/images/**",           // 画像ファイル
                     "/users/login",         // ログインページ
                     "/users/sign_up",       // サインアップページ
-                    "/users/{id}",          // 個別ユーザーページ（手動マッチ不可なので↓に統合）
-                    "/users/**",            // ユーザー詳細ページなど全般
-                    "/protos/**",           // プロトタイプ関連ページ
+                    "/users/**",            // ユーザー詳細ページなど
+                    "/detail/**",           // プロトタイプ詳細ページ（誰でも閲覧可能）
+                    "/uploads/**",          // 画像ファイルアクセス用
                     "/assets/**",           // 静的ファイル
                     "/packs/**"             // JSパック等
                 ).permitAll()
-                .requestMatchers(HttpMethod.POST, "/users").permitAll() // ユーザー登録POST
-                .anyRequest().authenticated() // 他の全ては認証必須
+                .requestMatchers("/protos/new").authenticated()  // 投稿ページは認証必須
+                .requestMatchers(HttpMethod.POST, "/users").permitAll() // ユーザー登録POSTは許可
+                .anyRequest().authenticated() // その他のリクエストは認証必須
             )
             .formLogin(form -> form
                 .loginPage("/users/login")

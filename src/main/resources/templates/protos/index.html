@@ -18,31 +18,30 @@
   <main class="main">
     <div class="inner">
       <div class="user__wrapper">
-    <!-- あいさつ表示 -->
-    <div class="greeting" th:if="${user != null}">
-      こんにちは、
-      <span th:if="${user.name == 'ゲスト'}">
-        ゲストさん
-      </span>
-      <span th:unless="${user.name == 'ゲスト'}">
-        <a class="greeting__link" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.name} + 'さん'">ユーザー名</a>
-        <!-- ✅ マイページへのリンク追加 -->
-        <span class="mypage-link">
-          <a th:href="@{/mypage}"></a>
-        </span>
-      </span>
-    </div>
+        <!-- あいさつ表示 -->
+        <div class="greeting" th:if="${user != null}">
+          こんにちは、
+          <span th:if="${user.name == 'ゲスト'}">
+            ゲストさん
+          </span>
+          <span th:unless="${user.name == 'ゲスト'}">
+            <a class="greeting__link" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.name} + 'さん'">ユーザー名</a>
+            <!-- ✅ マイページへのリンク追加 -->
+            <span class="mypage-link">
+              <a th:href="@{/mypage}"></a>
+            </span>
+          </span>
+        </div>
         <!-- プロトタイプ一覧 -->
-
 
         <div class="card__wrapper" th:if="${prototypes != null and !prototypes.isEmpty()}">
           <div class="card" th:each="proto : ${prototypes}">
-            <a th:href="@{'/prototypes/' + ${proto.id}}">
-              <img class="card__img" th:src="${proto.image}" alt="プロトタイプ画像" />
+            <a th:href="@{'/detail/' + ${proto.id}}">
+                <img class="card__img" th:src="${proto.image}" alt="プロトタイプ画像" />
             </a>
             <div class="card__body">
               <p class="card__title" th:text="${proto.name}">タイトル</p>
-              <p class="card__summary" th:text="${proto.catchcopy}">キャッチコピー</p>
+              <p class="card__summary" th:text="${proto.catchCopy}">キャッチコピー</p>
               <a class="card__user"
                  th:href="@{'/users/' + ${proto.user.id}}"
                  th:text="'by ' + ${proto.user.name}">by ユーザー名</a>
