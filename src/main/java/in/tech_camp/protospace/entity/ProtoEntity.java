@@ -8,6 +8,7 @@ import java.util.Date;
 @Table(name = "protos")
 public class ProtoEntity {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -17,9 +18,14 @@ public class ProtoEntity {
     @Column(name = "catchcopy")
     private String catchCopy;
 
+    private Long id;
+    private String name;
+    private String catchcopy;
+
     private String concept;
 
     private String image;
+
 
     @Column(name = "user_id")
     private Integer userId;
@@ -37,11 +43,17 @@ public class ProtoEntity {
 
     // getter/setter手動追加例
 
-    public Integer getId() {
+    private Long userId;
+    private UserEntity user;
+
+    // --- Getter & Setter ---
+
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -53,8 +65,13 @@ public class ProtoEntity {
         this.name = name;
     }
 
+
     public String getCatchCopy() {
         return catchCopy;
+
+    public String getCatchcopy() {
+        return catchcopy;
+
     }
 
     public void setCatchCopy(String catchCopy) {
@@ -77,11 +94,11 @@ public class ProtoEntity {
         this.image = image;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -92,6 +109,7 @@ public class ProtoEntity {
     public void setUser(UserEntity user) {
         this.user = user;
     }
+
 
     public List<CommentEntity> getComments() {
         return comments;
@@ -109,4 +127,16 @@ public class ProtoEntity {
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
+
+    private String user_name;
+
+public String getUser_name() {
+    return user_name;
+}
+
+public void setUser_name(String user_name) {
+    this.user_name = user_name;
+
+}
+
 }

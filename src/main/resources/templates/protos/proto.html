@@ -8,6 +8,7 @@
     </a>
     <div class="card__body">
       <p class="card__title" th:text="${proto.name}">タイトル</p>
+
       <p class="card__summary" th:text="${proto.catchCopy}">キャッチコピー</p>
       <a class="card__user"
          th:href="@{'/users/' + ${proto.user.id}}"
@@ -15,5 +16,11 @@
          by ユーザー名
       </a>
     </div>
+
+      <p class="card__summary" th:text="${proto.catchcopy}">キャッチコピー</p>
+<a class="card__user" 
+   th:href="@{/users/{id}(id=${proto.user.id})}"
+   th:text="'by ' + ${proto.user.name}">by ユーザー名</a>    
+
   </div>
 </div>

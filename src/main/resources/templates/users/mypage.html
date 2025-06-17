@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProtoSpace</title>
+
+  <link th:href="@{/css/style.css}" rel="stylesheet" media="all" />
+  <script th:src="@{/packs/js/application.js}"></script>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+  <!-- ヘッダー共通化 -->
+  <div th:insert="~{header :: header}"></div>
+
+  <main class="main">
+    <div class="inner">
+      <div class="user__wrapper">
+
+        <!-- ユーザー情報 -->
+        <h2 class="page-heading" 
+            th:text="|${userEntity != null ? userEntity.name : 'ゲスト'}さんの情報|">
+          ユーザー名さんの情報
+        </h2>
+        <table class="table" th:if="${userEntity != null}">
+          <tbody>
+            <tr>
+              <th class="table__col1">名前</th>
+              <td class="table__col2" th:text="${userEntity.name}">名前</td>
+            </tr>
+            <tr>
+              <th class="table__col1">プロフィール</th>
+              <td class="table__col2" th:text="${userEntity.profile}">プロフィール</td>
+            </tr>
+            <tr>
+              <th class="table__col1">所属</th>
+              <td class="table__col2" th:text="${userEntity.groupName}">所属</td>
+            </tr>
+            <tr>
+              <th class="table__col1">役職</th>
+              <td class="table__col2" th:text="${userEntity.post}">役職</td>
+            </tr>
+          </tbody>
+        </table>
+
+        プロトタイプ一覧
+        <h2 class="page-heading"
+            th:text="|${userEntity != null ? userEntity.name : 'ゲスト'}さんのプロトタイプ|">
+          さんのプロトタイプ
+        </h2>
+
+        <div class="card__wrapper" th:if="${prototypes != null and !prototypes.isEmpty()}">
+          <div class="card" th:each="proto : ${prototypes}">
+            <a th:href="@{'/prototypes/' + ${proto.id}}">
+              <img class="card__img" th:src="${proto.image}" alt="プロトタイプ画像" />
+            </a>
+            <div class="card__body">
+              <p class="card__title" th:text="${proto.name}">タイトル</p>
+              <p class="card__summary" th:text="${proto.catchcopy}">キャッチコピー</p>
+<a class="card__user"
+   th:href="@{'/users/' + ${proto.user.id}}"
+   th:text="'by ' + ${proto.user.name}">by ユーザー名</a>
+            </div>
+          </div>
+        </div>
+
+        <p th:if="${prototypes == null or prototypes.isEmpty()}">プロトタイプはまだ投稿されていません。</p>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- フッター共通化 -->
+  <div th:insert="~{footer :: footer}"></div>
+
+</body>
+</html>
