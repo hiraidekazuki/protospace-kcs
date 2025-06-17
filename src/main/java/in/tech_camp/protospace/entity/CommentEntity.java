@@ -7,5 +7,5 @@ public class CommentEntity {
   private Integer id;
   private String text;
   private UserEntity user;
-  private ProtoEntity tweet;
+  private ProtoEntity proto;
 }
