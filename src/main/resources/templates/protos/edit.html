@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>プロトタイプ編集 - PROTO SPACE</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <!-- headerフラグメント -->
+  <div th:insert="~{header :: header}"></div>
+
+  <div class="main">
+    <div class="inner">
+      <div class="form__wrapper">
+        <h2 class="page-heading">プロトタイプ編集</h2>
+
+        <!-- 編集フォーム -->
+        <form th:action="@{/protos/{id}/update(id=${proto.id})}" method="post" enctype="multipart/form-data" th:object="${protoForm}">
+
+          <!-- CSRF -->
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+          <!-- 全体エラー表示 -->
+          <div th:if="${#fields.hasErrors('*')}" class="error-messages">
+            <ul>
+              <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+            </ul>
+          </div>
+
+          <div class="field">
+            <label for="name">プロトタイプの名称</label><br />
+            <input type="text" id="name" th:field="*{name}" />
+          </div>
+
+          <div class="field">
+            <label for="catchcopy">キャッチコピー</label><br />
+            <textarea class="form__text" id="catchcopy" th:field="*{catchCopy}"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="concept">コンセプト</label><br />
+            <textarea class="form__text" id="concept" th:field="*{concept}"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="image">プロトタイプの画像</label><br />
+            <input type="file" id="image" th:field="*{image}" accept="image/*" />
+          </div>
+
+          <!-- 現在の画像プレビュー（任意） -->
+          <div th:if="${proto.image != null}">
+            <img th:src="@{${proto.image}}" alt="現在の画像" style="width: 500px; height: 500px;" />
+          </div>
+
+          <div class="actions">
+            <input type="submit" value="更新する" class="form__btn" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- footerフラグメント -->
+  <div th:insert="~{footer :: footer}"></div>
+
+</body>
+</html>

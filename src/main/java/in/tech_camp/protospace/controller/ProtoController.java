@@ -26,7 +26,6 @@ public class ProtoController {
 
     private final ProtoRepository protoRepository;
 
-    // 実行環境に合わせて絶対パスなど書き込み可能なディレクトリに変更推奨
     @Value("${upload.image.dir:/tmp/myapp/uploads/images}")
     private String uploadDir;
 
@@ -72,18 +71,14 @@ public class ProtoController {
                 String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
 
                 File uploadDirFile = new File(uploadDir);
-                if (!uploadDirFile.exists()) {
-                    boolean created = uploadDirFile.mkdirs();
-                    if (!created) {
-                        bindingResult.rejectValue("image", "upload.failed", "アップロードディレクトリの作成に失敗しました");
-                        return "protos/new";
-                    }
+                if (!uploadDirFile.exists() && !uploadDirFile.mkdirs()) {
+                    bindingResult.rejectValue("image", "upload.failed", "アップロードディレクトリの作成に失敗しました");
+                    return "protos/new";
                 }
 
                 File destFile = new File(uploadDirFile, fileName);
                 imageFile.transferTo(destFile);
 
-                // 公開URLはWebアクセス可能なパスに合わせて調整する
                 entity.setImage("/uploads/images/" + fileName);
 
             } catch (IOException e) {
@@ -98,7 +93,7 @@ public class ProtoController {
         return "redirect:/";
     }
 
-    @GetMapping("/protos/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String showDetail(
         @PathVariable Long id,
         Model model,
@@ -106,7 +101,8 @@ public class ProtoController {
     ) {
         ProtoEntity proto = protoRepository.findById(id);
         if (proto == null) {
-            throw new IllegalArgumentException("Invalid proto ID: " + id);
+            // 404ページなどにリダイレクトする例
+            return "redirect:/error/404";
         }
 
         model.addAttribute("proto", proto);
@@ -121,7 +117,7 @@ public class ProtoController {
     ) {
         ProtoEntity proto = protoRepository.findById(id);
         if (proto == null) {
-            throw new IllegalArgumentException("Invalid proto ID: " + id);
+            return "redirect:/error/404";
         }
 
         if (!proto.getUser().getId().equals(userDetails.getUserEntity().getId())) {

@@ -1,5 +1,8 @@
 package in.tech_camp.protospace.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * プロトタイプ（投稿）を表すエンティティ。
  */
@@ -18,6 +21,9 @@ public class ProtoEntity {
 
     // 関連ユーザー（JOIN取得用）
     private UserEntity user;
+
+    // 関連コメント（JOIN取得用）※仮実装。初期値は空リストでnull安全に
+    private List<CommentEntity> comments = new ArrayList<>();
 
     // --- Getter & Setter ---
 
@@ -77,6 +83,14 @@ public class ProtoEntity {
         this.user = user;
     }
 
+    public List<CommentEntity> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentEntity> comments) {
+        this.comments = comments;
+    }
+
     @Override
     public String toString() {
         return "ProtoEntity{" +
@@ -87,6 +101,7 @@ public class ProtoEntity {
                 ", image='" + image + '\'' +
                 ", userId=" + userId +
                 ", user=" + (user != null ? user.getName() : "null") +
+                ", comments=" + (comments != null ? comments.size() + "件" : "null") +
                 '}';
     }
 }
