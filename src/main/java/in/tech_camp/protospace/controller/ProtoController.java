@@ -15,12 +15,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import in.tech_camp.protospace.component.ImageUrl;
 import in.tech_camp.protospace.custom_user.CustomUserDetails;
 import in.tech_camp.protospace.entity.ProtoEntity;
+import in.tech_camp.protospace.form.CommentForm;
 import in.tech_camp.protospace.form.ProtoForm;
 import in.tech_camp.protospace.repository.ProtoRepository;
 import jakarta.validation.Valid;
@@ -32,7 +34,6 @@ public class ProtoController {
     private final ImageUrl imageUrl;
 
     @Autowired
-
     public ProtoController(ProtoRepository protoRepository, ImageUrl imageUrl) {
         this.protoRepository = protoRepository;
         this.imageUrl = imageUrl;
@@ -102,10 +103,20 @@ public class ProtoController {
         return "redirect:/";
     }
 
+    // 投稿詳細ページ
     @GetMapping("/protos/new")
     public String newProto(Model model) {
         model.addAttribute("protoForm", new ProtoForm());
         return "protos/new";
     }
-}
 
+    // プロト詳細表示（コメントフォーム付き）
+    @GetMapping("/protos/{protoId}")
+    public String showProtoDetail(@PathVariable("protoId") Integer protoId, Model model) {
+        ProtoEntity proto = protoRepository.findById(protoId);
+        CommentForm commentForm = new CommentForm();
+        model.addAttribute("proto", proto);
+        model.addAttribute("commentForm", commentForm);
+        return "protos/detail";
+    }
+}
