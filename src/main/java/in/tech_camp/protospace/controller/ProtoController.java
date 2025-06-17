@@ -19,6 +19,7 @@ public class ProtoController {
     private final ProtoRepository protoRepository;
 
     @Autowired
+
     public ProtoController(ProtoRepository protoRepository) {
         this.protoRepository = protoRepository;
     }
