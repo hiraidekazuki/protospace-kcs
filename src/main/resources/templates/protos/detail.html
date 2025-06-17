@@ -29,9 +29,7 @@
       <!-- 編集・削除ボタンを「ログインしていて、かつ本人のみ」に表示 -->
       <div class="prototype__manage"
            th:if="${user != null and user.id == proto.user.id}">
-        <form th:action="@{/protos/{protoId}/update(protoId=${proto.id})}" method="post">
-          <input type="submit" class="prototype__btn" value="編集する">
-        </form>
+ <a th:href="@{/protos/{protoId}/edit(protoId=${proto.id})}" class="prototype__btn">編集する</a>
         <form th:action="@{/protos/{protoId}/delete(protoId=${proto.id})}" method="post">
           <input type="submit" class="prototype__btn" value="削除する">
         </form>

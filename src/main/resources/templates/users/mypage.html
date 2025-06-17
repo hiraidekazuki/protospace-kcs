@@ -53,7 +53,7 @@
 
         <div class="card__wrapper" th:if="${prototypes != null and !prototypes.isEmpty()}">
           <div class="card" th:each="proto : ${prototypes}">
-            <a th:href="@{'/prototypes/' + ${proto.id}}">
+            <a th:href="@{'/detail/' + ${proto.id}}">
               <img class="card__img" th:src="${proto.image}" alt="プロトタイプ画像" />
             </a>
             <div class="card__body">

@@ -15,11 +15,12 @@
       <div class="form__wrapper">
         <h2 class="page-heading">プロトタイプ編集</h2>
 
-        <!-- 編集フォーム -->
-        <form th:action="@{/protos/{id}/update(id=${proto.id})}" method="post" enctype="multipart/form-data" th:object="${protoForm}">
-
-          <!-- CSRF -->
-          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <form th:action="@{/protos/{id}(id=${protoId})}" method="post" enctype="multipart/form-data" th:object="${protoForm}">
+          <!-- CSRF (安全のためnullチェック付き) -->
+          <input type="hidden" 
+                 th:if="${_csrf != null}" 
+                 th:name="${_csrf.parameterName}" 
+                 th:value="${_csrf.token}" />
 
           <!-- 全体エラー表示 -->
           <div th:if="${#fields.hasErrors('*')}" class="error-messages">
@@ -48,15 +49,11 @@
             <input type="file" id="image" th:field="*{image}" accept="image/*" />
           </div>
 
-          <!-- 現在の画像プレビュー（任意） -->
-          <div th:if="${proto.image != null}">
-            <img th:src="@{${proto.image}}" alt="現在の画像" style="width: 500px; height: 500px;" />
-          </div>
-
           <div class="actions">
-            <input type="submit" value="更新する" class="form__btn" />
+            <input type="submit" value="保存する" class="form__btn" />
           </div>
         </form>
+
       </div>
     </div>
   </div>

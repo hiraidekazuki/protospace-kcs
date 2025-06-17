@@ -1,6 +1,5 @@
 package in.tech_camp.protospace.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +26,7 @@ import in.tech_camp.protospace.custom_user.CustomUserDetails;
 import in.tech_camp.protospace.entity.ProtoEntity;
 import in.tech_camp.protospace.form.ProtoForm;
 import in.tech_camp.protospace.repository.ProtoRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
@@ -76,9 +77,9 @@ public class ProtoController {
         if (userDetails != null) {
             entity.setUser(userDetails.getUserEntity());
             entity.setUserId(userDetails.getUserEntity().getId());
-            entity.setUser_name(userDetails.getUsername());
+            entity.setUserName(userDetails.getUsername());
         } else {
-            entity.setUser_name("test_user");
+            entity.setUserName("test_user");
         }
 
         MultipartFile imageFile = protoForm.getImage();
@@ -127,21 +128,94 @@ public class ProtoController {
         return "protos/detail";
     }
 
-    @PostMapping("/protos/{id}/delete")
-    public String deleteProto(
+    @GetMapping("/protos/{id}/edit")
+    public String editProto(
         @PathVariable Long id,
-        @AuthenticationPrincipal CustomUserDetails userDetails
+        Model model,
+        @AuthenticationPrincipal CustomUserDetails userDetails,
+        HttpServletRequest request
     ) {
         ProtoEntity proto = protoRepository.findById(id);
         if (proto == null) {
             return "redirect:/error/404";
         }
 
-        if (userDetails == null || !proto.getUser().getId().equals(userDetails.getUserEntity().getId())) {
-            throw new SecurityException("You are not authorized to delete this post.");
+        // 投稿者でなければトップページへリダイレクト
+        if (userDetails == null || !proto.getUserId().equals(userDetails.getUserEntity().getId())) {
+            return "redirect:/";
         }
 
-        protoRepository.deleteById(id);
-        return "redirect:/";
+        ProtoForm protoForm = new ProtoForm();
+        protoForm.setName(proto.getName());
+        protoForm.setCatchCopy(proto.getCatchCopy());
+        protoForm.setConcept(proto.getConcept());
+
+        model.addAttribute("protoForm", protoForm);
+        model.addAttribute("protoId", id);
+        model.addAttribute("proto", proto);
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+        model.addAttribute("_csrf", csrfToken);
+
+        return "protos/edit";
+    }
+
+    @PostMapping("/protos/{id}")
+    public String updateProto(
+        @PathVariable Long id,
+        @Valid @ModelAttribute("protoForm") ProtoForm protoForm,
+        BindingResult bindingResult,
+        @AuthenticationPrincipal CustomUserDetails userDetails,
+        Model model
+    ) {
+        ProtoEntity proto = protoRepository.findById(id);
+        if (proto == null) {
+            return "redirect:/error/404";
+        }
+
+        // 投稿者でなければトップページへリダイレクト
+        if (userDetails == null || !proto.getUserId().equals(userDetails.getUserEntity().getId())) {
+            return "redirect:/";
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("protoId", id);
+            return "protos/edit";
+        }
+
+        proto.setName(protoForm.getName());
+        proto.setCatchCopy(protoForm.getCatchCopy());
+        proto.setConcept(protoForm.getConcept());
+
+        MultipartFile imageFile = protoForm.getImage();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String fileName = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+                                 + "_" + imageFile.getOriginalFilename();
+
+                String uploadDir = imageUrl != null ? imageUrl.getUrl() : defaultUploadDir;
+                Path imagePath = Paths.get(uploadDir, fileName);
+                Files.createDirectories(imagePath.getParent());
+                Files.copy(imageFile.getInputStream(), imagePath);
+
+                proto.setImage("/uploads/" + fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+                model.addAttribute("error", "画像のアップロードに失敗しました。");
+                model.addAttribute("protoId", id);
+                return "protos/edit";
+            }
+        }
+
+        try {
+            protoRepository.update(proto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "更新に失敗しました。");
+            model.addAttribute("protoId", id);
+            return "protos/edit";
+        }
+
+        return "redirect:/detail/" + id;
     }
 }
