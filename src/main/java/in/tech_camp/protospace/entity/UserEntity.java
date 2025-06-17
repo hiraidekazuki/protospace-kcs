@@ -1,5 +1,7 @@
 package in.tech_camp.protospace.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -24,6 +26,8 @@ public class UserEntity {
     private String groupName;
 
     private String post;
+
+    private List<CommentEntity> comments;
 
     // getter/setterはそのまま
 

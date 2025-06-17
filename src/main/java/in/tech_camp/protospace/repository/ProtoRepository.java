@@ -3,7 +3,9 @@ package in.tech_camp.protospace.repository;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.One;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -51,9 +53,11 @@ public interface ProtoRepository {
       @Result(property = "catchcopy", column = "catchcopy"),
       @Result(property = "concept", column = "concept"),
       @Result(property = "image", column = "image"),
-      @Result(property = "userId", column = "user_id"),
-      @Result(property = "user.id", column = "user_id_alias"),
-      @Result(property = "user.name", column = "user_name_alias")
+      @Result(property = "userId", column = "user_id",
+              one = @One(select = "in.tech_camp.protospace.repository.UserRepository.findById")),
+      @Result(property="comments", column = "id",
+              many = @Many(select = "in.tech_camp.protospace.repository.CommentRepository.findByProtoId"))
+    
   })
-  List<ProtoEntity> findByUserId(Long userId);
+  ProtoEntity findByUserId(Long userId);
 }

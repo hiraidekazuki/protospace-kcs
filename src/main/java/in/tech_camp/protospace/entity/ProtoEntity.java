@@ -1,5 +1,7 @@
 package in.tech_camp.protospace.entity;
 
+import java.util.List;
+
 public class ProtoEntity {
     private Long id;
     private String name;
@@ -8,6 +10,7 @@ public class ProtoEntity {
     private String image;
     private Long userId;
     private UserEntity user;
+    private List<CommentEntity> comments;
 
     // --- Getter & Setter ---
 
