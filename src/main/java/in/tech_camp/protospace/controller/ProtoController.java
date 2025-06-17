@@ -32,6 +32,7 @@ public class ProtoController {
     private final ImageUrl imageUrl;
 
     @Autowired
+
     public ProtoController(ProtoRepository protoRepository, ImageUrl imageUrl) {
         this.protoRepository = protoRepository;
         this.imageUrl = imageUrl;
