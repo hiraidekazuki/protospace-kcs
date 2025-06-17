@@ -44,7 +44,7 @@ public interface ProtoRepository {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void save(ProtoEntity proto);
 
-    // ユーザーIDでプロトタイプを取得
+    // ユーザーIDでプロトタイプを複数取得
     @Select("""
         SELECT p.id, p.name, p.catchcopy, p.concept, p.image, p.user_id
         FROM protos p
@@ -63,7 +63,7 @@ public interface ProtoRepository {
         @Result(property = "comments", column = "id",
                 many = @Many(select = "in.tech_camp.protospace.repository.CommentRepository.findByProtoId"))
     })
-    ProtoEntity findByUserId(Long userId);
+    List<ProtoEntity> findByUserId(Long userId);  // ← 修正済み！
 
     // プロトタイプIDで1件取得（詳細ページ表示用）
     @Select("""
