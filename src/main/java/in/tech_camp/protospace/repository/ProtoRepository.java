@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import in.tech_camp.protospace.entity.ProtoEntity;
 
@@ -79,4 +80,8 @@ public interface ProtoRepository {
   // プロトタイプ削除
   @Delete("DELETE FROM protos WHERE id = #{id}")
   int deleteById(Long id);
+
+  // プロトタイプ更新
+  @Update("UPDATE protos SET name = #{name}, catchcopy = #{catchCopy}, concept = #{concept}, image = #{image} WHERE id = #{id}")
+  int update(ProtoEntity proto);
 }

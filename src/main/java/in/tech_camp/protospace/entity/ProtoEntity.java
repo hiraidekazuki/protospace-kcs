@@ -19,6 +19,9 @@ public class ProtoEntity {
     // 外部キー（DB保存用）
     private Long userId;
 
+    // 表示用ユーザー名（追加）
+    private String userName;
+
     // 関連ユーザー（JOIN取得用）
     private UserEntity user;
 
@@ -75,6 +78,14 @@ public class ProtoEntity {
         this.userId = userId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public UserEntity getUser() {
         return user;
     }
@@ -82,7 +93,7 @@ public class ProtoEntity {
     public void setUser(UserEntity user) {
         this.user = user;
     }
-  
+
     public List<CommentEntity> getComments() {
         return comments;
     }
@@ -100,6 +111,7 @@ public class ProtoEntity {
                 ", concept='" + concept + '\'' +
                 ", image='" + image + '\'' +
                 ", userId=" + userId +
+                ", userName='" + userName + '\'' +
                 ", user=" + (user != null ? user.getName() : "null") +
                 ", comments=" + (comments != null ? comments.size() + "件" : "null") +
                 '}';
