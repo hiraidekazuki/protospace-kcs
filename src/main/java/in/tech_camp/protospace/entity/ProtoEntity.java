@@ -59,7 +59,6 @@ public class ProtoEntity {
         this.userId = userId;
     }
 
-    // 👇 追加：User フィールドの getter/setter
     public UserEntity getUser() {
         return user;
     }
@@ -67,4 +66,15 @@ public class ProtoEntity {
     public void setUser(UserEntity user) {
         this.user = user;
     }
+
+    private String user_name;
+
+public String getUser_name() {
+    return user_name;
+}
+
+public void setUser_name(String user_name) {
+    this.user_name = user_name;
+}
+
 }
