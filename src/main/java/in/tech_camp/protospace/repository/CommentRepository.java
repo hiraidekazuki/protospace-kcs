@@ -2,8 +2,10 @@ package in.tech_camp.protospace.repository;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -20,4 +22,8 @@ public interface CommentRepository {
                 one = @One(select = "in.tech_camp.protospace.repository.ProtoRepository.findById"))
     })
     List<CommentEntity> findByProtoId(Integer protoId);
+
+    @Insert("INSERT INTO comments (text, user_id, proto_id) VALUES (#{text}, #{user.id}, #{proto.id})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+     void insert(CommentEntity comment);
 }
