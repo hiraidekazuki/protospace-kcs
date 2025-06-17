@@ -12,7 +12,6 @@ import in.tech_camp.protospace.entity.UserEntity;
 @Mapper
 public interface UserRepository {
 
-
     @Select("SELECT * FROM users WHERE id = #{id}")
     UserEntity findById(Long id);
 
@@ -23,10 +22,9 @@ public interface UserRepository {
     boolean existsByEmail(String email);  // ← 追加
 
     @Insert("""
-        INSERT INTO users (email, password, name, profile, groupName, post)
+        INSERT INTO users (email, password, name, profile, group_name, post)
         VALUES (#{email}, #{password}, #{name}, #{profile}, #{groupName}, #{post})
     """)
-
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(UserEntity user);
 

@@ -34,8 +34,8 @@ public class UserForm {
     private String post;
 
     public void validatePasswordConfirmation(BindingResult result) {
-      if (!password.equals(passwordConfirmation)) {
-          result.rejectValue("passwordConfirmation", null, "Password confirmation doesn't match Password");
-      }
+        if (!password.equals(passwordConfirmation)) {
+            result.rejectValue("passwordConfirmation", null, "パスワードが一致しません");
+        }
     }
 }

@@ -18,16 +18,15 @@ import jakarta.validation.ValidatorFactory;
 public class UserFormValidationTests {
 
     private Validator validator;
+    private UserForm form;
+    private BindingResult bindingResult;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-    }
 
-    // ヘルパー：正しいフォームを作成する
-    private UserForm createValidForm() {
-        UserForm form = new UserForm();
+        form = new UserForm();
         form.setEmail("test@example.com");
         form.setPassword("abcdef");
         form.setPasswordConfirmation("abcdef");
@@ -35,112 +34,110 @@ public class UserFormValidationTests {
         form.setProfile("桃太郎");
         form.setGroupName("岡山");
         form.setPost("桃太郎");
-        return form;
+
+        bindingResult = new BeanPropertyBindingResult(form, "userForm");
     }
 
     @Test
     void 正常な入力ならバリデーションエラーがないこと() {
-        UserForm form = createValidForm();
         Set<ConstraintViolation<UserForm>> violations = validator.validate(form);
-
-        BindingResult result = new BeanPropertyBindingResult(form, "userForm");
-        form.validatePasswordConfirmation(result);
+        form.validatePasswordConfirmation(bindingResult);
 
         assertTrue(violations.isEmpty());
-        assertFalse(result.hasErrors());
+        assertFalse(bindingResult.hasErrors());
     }
 
     @Test
     void メールアドレスが空だとエラーになる() {
-        UserForm form = createValidForm();
         form.setEmail("");
-
         Set<ConstraintViolation<UserForm>> violations = validator.validate(form);
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("email")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("email")
+            && v.getMessage().contains("メールアドレスは必須です")));
     }
 
     @Test
     void メールアドレスが不正形式だとエラーになる() {
-        UserForm form = createValidForm();
         form.setEmail("invalid-email");
-
         Set<ConstraintViolation<UserForm>> violations = validator.validate(form);
+
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("email")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("email")
+            && v.getMessage().contains("有効なメールアドレスを入力してください")));
     }
 
     @Test
     void パスワードが空だとエラーになる() {
-        UserForm form = createValidForm();
         form.setPassword("");
-
         Set<ConstraintViolation<UserForm>> violations = validator.validate(form);
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("password")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("password")
+            && v.getMessage().contains("パスワードは必須です")));
     }
 
     @Test
     void パスワードが6文字未満だとエラーになる() {
-        UserForm form = createValidForm();
         form.setPassword("123");
         form.setPasswordConfirmation("123");
-
         Set<ConstraintViolation<UserForm>> violations = validator.validate(form);
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("password")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("password")
+            && v.getMessage().contains("パスワードは6文字以上で入力してください")));
     }
 
     @Test
     void パスワード確認が空だとエラーになる() {
-        UserForm form = createValidForm();
         form.setPasswordConfirmation("");
-
         Set<ConstraintViolation<UserForm>> violations = validator.validate(form);
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("passwordConfirmation")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("passwordConfirmation")
+            && v.getMessage().contains("パスワード（確認）は必須です")));
     }
 
     @Test
     void パスワードと確認が一致しないとエラーになる() {
-        UserForm form = createValidForm();
         form.setPassword("abcdef");
         form.setPasswordConfirmation("ghijkl");
+        form.validatePasswordConfirmation(bindingResult);
 
-        BindingResult result = new BeanPropertyBindingResult(form, "userForm");
-        form.validatePasswordConfirmation(result);
-
-        assertTrue(result.hasFieldErrors("passwordConfirmation"), "パスワード確認が一致しないエラー");
+        assertTrue(bindingResult.hasFieldErrors("passwordConfirmation"));
+        assertTrue(bindingResult.getFieldErrors("passwordConfirmation").stream()
+            .anyMatch(e -> e.getDefaultMessage().contains("パスワードが一致しません")));
     }
 
     @Test
     void ユーザー名が空だとエラーになる() {
-        UserForm form = createValidForm();
         form.setName("");
-
         Set<ConstraintViolation<UserForm>> violations = validator.validate(form);
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name")
+            && v.getMessage().contains("ユーザー名は必須です")));
     }
 
     @Test
     void プロフィールが空だとエラーになる() {
-        UserForm form = createValidForm();
         form.setProfile("");
-
         Set<ConstraintViolation<UserForm>> violations = validator.validate(form);
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("profile")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("profile")
+            && v.getMessage().contains("プロフィールは必須です")));
     }
 
     @Test
     void 所属が空だとエラーになる() {
-        UserForm form = createValidForm();
         form.setGroupName("");
-
         Set<ConstraintViolation<UserForm>> violations = validator.validate(form);
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("groupName")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("groupName")
+            && v.getMessage().contains("所属は必須です")));
     }
 
     @Test
     void 役職が空だとエラーになる() {
-        UserForm form = createValidForm();
         form.setPost("");
-
         Set<ConstraintViolation<UserForm>> violations = validator.validate(form);
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("post")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("post")
+            && v.getMessage().contains("役職は必須です")));
     }
 }
