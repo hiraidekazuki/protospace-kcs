@@ -82,7 +82,7 @@ public class ProtoEntity {
     public void setUser(UserEntity user) {
         this.user = user;
     }
-
+  
     public List<CommentEntity> getComments() {
         return comments;
     }

@@ -1,19 +1,54 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>ログイン</title>
+  <title>ProtoSpace - ログイン</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>ログインページ</h1>
+  <header class="header">
+    <div class="inner">
+      <div class="nav">
+        <div class="nav__left">
+          <a th:href="@{/}"><img class="logo" src="/images/logo-b99f177af8fb82de2d6d7b86e95c7f329d3d143edd8b225bc2875ad9dd6e0cc3.png" alt="ProtoSpace ロゴ"></a>
+        </div>
+        <div class="nav__right">
+          <a class="nav__btn" th:href="@{/users/login}">ログイン</a>
+          <a class="nav__btn" th:href="@{/users/sign_up}">新規登録</a>
+        </div>
+      </div>
+    </div>
+  </header>
 
-    <form th:action="@{/login}" method="post">
-        <label>メールアドレス:</label>
-        <input type="email" name="email" required><br>
+  <div class="main">
+    <div class="inner">
+      <div class="form__wrapper">
+        <h2 class="page-heading">ユーザーログイン</h2>
+        <form th:action="@{/login}" method="post">
 
-        <label>パスワード:</label>
-        <input type="password" name="password" required><br>
+          <div class="field">
+            <label for="email">メールアドレス</label><br>
+            <input type="email"  id="email" autocomplete="email" autofocus="autofocus"  name="email" />
+          </div>
 
-        <button type="submit">ログイン</button>
-    </form>
+          <div class="field">
+            <label for="password">パスワード（6文字以上）</label><br>
+            <input type="password"  id="password" autocomplete="current-password" name="password" />
+          </div>
+
+          <div class="actions">
+            <input type="submit" value="ログイン" class="form__btn" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="under">
+    <p class="copyright">Copyright © PROTO SPACE All rights reserved.</p>
+  </footer>
 </body>
+
 </html>

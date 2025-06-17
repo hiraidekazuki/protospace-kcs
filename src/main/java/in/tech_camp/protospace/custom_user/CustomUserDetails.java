@@ -35,6 +35,17 @@ public class CustomUserDetails implements UserDetails {
         return user.getEmail(); // ログインIDとして使う
     }
 
+      public long getId() {
+      return user.getId();
+    }
+
+    public String getName() {
+      return user.getName();
+    }
+
+
+
+
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }

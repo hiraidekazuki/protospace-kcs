@@ -2,8 +2,14 @@ package in.tech_camp.protospace.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -15,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import in.tech_camp.protospace.component.ImageUrl;
 import in.tech_camp.protospace.custom_user.CustomUserDetails;
 import in.tech_camp.protospace.entity.ProtoEntity;
 import in.tech_camp.protospace.form.ProtoForm;
@@ -25,12 +32,15 @@ import jakarta.validation.Valid;
 public class ProtoController {
 
     private final ProtoRepository protoRepository;
+    private final ImageUrl imageUrl;
 
     @Value("${upload.image.dir:/tmp/myapp/uploads/images}")
-    private String uploadDir;
+    private String defaultUploadDir;
 
-    public ProtoController(ProtoRepository protoRepository) {
+    @Autowired
+    public ProtoController(ProtoRepository protoRepository, ImageUrl imageUrl) {
         this.protoRepository = protoRepository;
+        this.imageUrl = imageUrl;
     }
 
     @GetMapping("/")
@@ -62,33 +72,41 @@ public class ProtoController {
         entity.setName(protoForm.getName());
         entity.setCatchCopy(protoForm.getCatchCopy());
         entity.setConcept(protoForm.getConcept());
-        entity.setUser(userDetails.getUserEntity());
-        entity.setUserId(userDetails.getUserEntity().getId());
+
+        if (userDetails != null) {
+            entity.setUser(userDetails.getUserEntity());
+            entity.setUserId(userDetails.getUserEntity().getId());
+            entity.setUser_name(userDetails.getUsername());
+        } else {
+            entity.setUser_name("test_user");
+        }
 
         MultipartFile imageFile = protoForm.getImage();
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
-                String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
+                String fileName = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+                                 + "_" + imageFile.getOriginalFilename();
 
-                File uploadDirFile = new File(uploadDir);
-                if (!uploadDirFile.exists() && !uploadDirFile.mkdirs()) {
-                    bindingResult.rejectValue("image", "upload.failed", "アップロードディレクトリの作成に失敗しました");
-                    return "protos/new";
-                }
+                String uploadDir = imageUrl != null ? imageUrl.getUrl() : defaultUploadDir;
+                Path imagePath = Paths.get(uploadDir, fileName);
+                Files.createDirectories(imagePath.getParent());
+                Files.copy(imageFile.getInputStream(), imagePath);
 
-                File destFile = new File(uploadDirFile, fileName);
-                imageFile.transferTo(destFile);
-
-                entity.setImage("/uploads/images/" + fileName);
-
+                entity.setImage("/uploads/" + fileName);
             } catch (IOException e) {
                 e.printStackTrace();
-                bindingResult.rejectValue("image", "upload.failed", "画像のアップロードに失敗しました");
+                model.addAttribute("error", "画像のアップロードに失敗しました。");
                 return "protos/new";
             }
         }
 
-        protoRepository.save(entity);
+        try {
+            protoRepository.save(entity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "保存に失敗しました。");
+            return "protos/new";
+        }
 
         return "redirect:/";
     }
@@ -101,7 +119,6 @@ public class ProtoController {
     ) {
         ProtoEntity proto = protoRepository.findById(id);
         if (proto == null) {
-            // 404ページなどにリダイレクトする例
             return "redirect:/error/404";
         }
 
@@ -120,7 +137,7 @@ public class ProtoController {
             return "redirect:/error/404";
         }
 
-        if (!proto.getUser().getId().equals(userDetails.getUserEntity().getId())) {
+        if (userDetails == null || !proto.getUser().getId().equals(userDetails.getUserEntity().getId())) {
             throw new SecurityException("You are not authorized to delete this post.");
         }
 
